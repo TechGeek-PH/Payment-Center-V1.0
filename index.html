@@ -581,6 +581,17 @@
 
     .required { color: var(--danger); }
     .field-hint { color: var(--muted); font-size: 10px; font-weight: 600; }
+    .scan-status {
+      display: block;
+      min-height: 17px;
+      margin-top: 6px;
+      color: var(--muted);
+      font-size: 11px;
+      font-weight: 700;
+    }
+    .scan-status.reading { color: var(--blue-2); }
+    .scan-status.found { color: #0b6947; }
+    .scan-status.not-found { color: #8b5a00; }
 
     input, select, textarea {
       width: 100%;
@@ -888,8 +899,9 @@
                   </div>
 
                   <div class="field">
-                    <label for="referenceNumber">Reference number <span class="field-hint">Can be read from screenshot</span></label>
-                    <input id="referenceNumber" name="referenceNumber" type="text" maxlength="60" placeholder="Optional">
+                    <label for="referenceNumber">Reference number <span class="field-hint">Auto-detect from screenshot</span></label>
+                    <input id="referenceNumber" name="referenceNumber" type="text" maxlength="60" placeholder="Upload screenshot to detect automatically">
+                    <span class="scan-status" id="referenceScanStatus" aria-live="polite">Waiting for payment screenshot.</span>
                   </div>
 
                   <div class="field full">
@@ -1037,6 +1049,10 @@
         methods: [],
         selectedMethodId: "",
         screenshot: null,
+        scanPromise: null,
+        scanSequence: 0,
+        autoReference: "",
+        autoAmount: "",
         startedAt: Date.now()
       };
 
@@ -1049,6 +1065,11 @@
         apiStatus: document.getElementById("apiStatus"),
         paymentMethod: document.getElementById("paymentMethod"),
         paymentForm: document.getElementById("paymentForm"),
+        referenceNumber: document.getElementById("referenceNumber"),
+        referenceScanStatus: document.getElementById("referenceScanStatus"),
+        amount: document.getElementById("amount"),
+        clientAccountNumber: document.getElementById("clientAccountNumber"),
+        contactNumber: document.getElementById("contactNumber"),
         screenshot: document.getElementById("screenshot"),
         uploadBox: document.getElementById("uploadBox"),
         uploadCopy: document.getElementById("uploadCopy"),
@@ -1356,13 +1377,17 @@
           return;
         }
 
+        const currentSequence = ++state.scanSequence;
+        els.uploadCopy.hidden = false;
         els.uploadCopy.innerHTML = '<div class="upload-icon">…</div><strong>Optimizing screenshot</strong><span>Please wait a moment.</span>';
         els.previewImage.hidden = true;
+        updateReferenceScanStatus("Preparing screenshot for automatic reference detection…", "reading");
 
         try {
-          const optimized = await optimizeImage(file, 1800, 0.90);
+          const optimized = await optimizeImage(file, 2600, 0.96);
           const maxBytes = (Number(config.maxUploadMb) || 5) * 1024 * 1024;
           if (optimized.sizeBytes > maxBytes) throw new Error("The optimized screenshot is still larger than the allowed upload size.");
+          if (currentSequence !== state.scanSequence) return;
 
           state.screenshot = {
             dataUrl: optimized.dataUrl,
@@ -1375,7 +1400,10 @@
           els.previewImage.hidden = false;
           els.uploadCopy.hidden = true;
           els.previewBar.style.display = "flex";
-          els.fileInfo.textContent = state.screenshot.fileName + " · " + formatBytes(state.screenshot.sizeBytes);
+          els.fileInfo.textContent = state.screenshot.fileName + " · " + formatBytes(state.screenshot.sizeBytes) + " · reading reference…";
+
+          state.scanPromise = scanScreenshotForDetails(currentSequence);
+          await state.scanPromise;
         } catch (error) {
           console.error(error);
           showError(error.message || "Unable to process the screenshot.");
@@ -1383,8 +1411,96 @@
         }
       }
 
+      async function scanScreenshotForDetails(sequence) {
+        const apiUrl = String(config.apiUrl || "").trim();
+        const configured = /^https:\/\/script\.google\.com\/macros\/s\/.+\/exec(?:\?.*)?$/i.test(apiUrl);
+        if (!configured || !state.screenshot) {
+          updateReferenceScanStatus("Automatic detection is unavailable until the Apps Script URL is connected.", "not-found");
+          return;
+        }
+
+        const selectedMethod = state.methods.find(method => method.id === state.selectedMethodId);
+        updateReferenceScanStatus("Reading reference number from screenshot…", "reading");
+
+        const payload = {
+          action: "scanScreenshot",
+          screenshotDataUrl: state.screenshot.dataUrl,
+          screenshotFileName: state.screenshot.fileName,
+          screenshotMimeType: state.screenshot.mimeType,
+          receivingAccountNumber: selectedMethod ? selectedMethod.accountNumber : "",
+          clientAccountNumber: cleanText(els.clientAccountNumber.value, 40),
+          contactNumber: cleanText(els.contactNumber.value, 20),
+          amount: Number(els.amount.value) || ""
+        };
+
+        try {
+          const response = await fetchWithTimeout(apiUrl, {
+            method: "POST",
+            redirect: "follow",
+            headers: { "Content-Type": "text/plain;charset=utf-8" },
+            body: JSON.stringify(payload)
+          }, 70000);
+
+          const raw = await response.text();
+          let data;
+          try { data = JSON.parse(raw); }
+          catch (_) { throw new Error("The OCR server returned an unreadable response."); }
+
+          if (!response.ok || !data.ok) throw new Error(data.message || "Unable to read the screenshot.");
+          if (/unavailable/i.test(String(data.ocrStatus || ""))) {
+            throw new Error(data.ocrStatus);
+          }
+          if (sequence !== state.scanSequence || !state.screenshot) return;
+
+          const detectedReference = cleanText(data.referenceNumber, 60);
+          const detectedAmount = Number(data.amount);
+
+          if (detectedReference) {
+            if (!els.referenceNumber.value || els.referenceNumber.value === state.autoReference) {
+              els.referenceNumber.value = detectedReference;
+              state.autoReference = detectedReference;
+            }
+            updateReferenceScanStatus("Reference detected: " + detectedReference, "found");
+          } else if (data.textDetected) {
+            updateReferenceScanStatus("Screenshot text was read, but no clear reference number was found. You may enter it manually.", "not-found");
+          } else {
+            updateReferenceScanStatus("No readable text was found. Try a clear, uncropped screenshot or enter the reference manually.", "not-found");
+          }
+
+          if (Number.isFinite(detectedAmount) && detectedAmount > 0 && (!els.amount.value || Number(els.amount.value) === Number(state.autoAmount))) {
+            els.amount.value = detectedAmount.toFixed(2);
+            state.autoAmount = detectedAmount;
+          }
+
+          els.fileInfo.textContent = state.screenshot.fileName + " · " + formatBytes(state.screenshot.sizeBytes) + (detectedReference ? " · reference detected" : " · scan completed");
+        } catch (error) {
+          console.error(error);
+          if (sequence !== state.scanSequence) return;
+          updateReferenceScanStatus("Automatic detection failed. You may still enter the reference number manually.", "not-found");
+          if (state.screenshot) {
+            els.fileInfo.textContent = state.screenshot.fileName + " · " + formatBytes(state.screenshot.sizeBytes) + " · scan unavailable";
+          }
+        }
+      }
+
+      function updateReferenceScanStatus(message, status) {
+        els.referenceScanStatus.textContent = message;
+        els.referenceScanStatus.classList.remove("reading", "found", "not-found");
+        if (status) els.referenceScanStatus.classList.add(status);
+      }
+
       function clearScreenshot() {
+        state.scanSequence += 1;
+        state.scanPromise = null;
         state.screenshot = null;
+        if (state.autoReference && els.referenceNumber.value === state.autoReference) {
+          els.referenceNumber.value = "";
+        }
+        if (state.autoAmount && Number(els.amount.value) === Number(state.autoAmount)) {
+          els.amount.value = "";
+        }
+        state.autoReference = "";
+        state.autoAmount = "";
         els.screenshot.value = "";
         els.previewImage.src = "";
         els.previewImage.hidden = true;
@@ -1392,6 +1508,7 @@
         els.uploadCopy.innerHTML = '<div class="upload-icon">＋</div><strong>Tap to upload payment screenshot</strong><span>PNG, JPG, or WEBP · maximum <span id="maxUploadLabelInline">' + (config.maxUploadMb || 5) + '</span> MB after optimization</span>';
         els.previewBar.style.display = "none";
         els.fileInfo.textContent = "No file selected";
+        updateReferenceScanStatus("Waiting for payment screenshot.", "");
       }
 
       function optimizeImage(file, maxDimension, quality) {
@@ -1444,6 +1561,11 @@
         if (!configured) {
           showError("The Google Apps Script Web App URL is not configured yet. Open config.js and paste the deployed /exec URL.");
           return;
+        }
+
+        if (state.scanPromise) {
+          setSubmitting(true, "Finishing automatic reference detection…");
+          try { await state.scanPromise; } catch (_) {}
         }
 
         const formData = new FormData(els.paymentForm);
@@ -1525,9 +1647,9 @@
         els.errorCard.textContent = "";
       }
 
-      function setSubmitting(submitting) {
+      function setSubmitting(submitting, message) {
         els.submitButton.disabled = submitting;
-        els.submitButton.textContent = submitting ? "Uploading and reading screenshot…" : "Submit payment for verification";
+        els.submitButton.textContent = submitting ? (message || "Uploading and reading screenshot…") : "Submit payment for verification";
       }
 
       async function copyText(value) {
