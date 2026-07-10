@@ -1,0 +1,8 @@
+Payment Method ID,Label,Account Name,Account Number,QR Image URL
+GOTYME-001,GoTyme Bank,Mark Corona De Mesa,019772179572,assets/qr/gotyme-bank.png
+BPI-001,BPI Bank,Mark De Mesa,9869013474,assets/qr/bpi-bank.png
+UNIONBANK-001,UnionBank,Mark De Mesa,109480124887,assets/qr/union-bank.png
+MARIBANK-001,Mari Bank,Mark De Mesa,11624449510,assets/qr/mari-bank.png
+GCASH-001,GCash Option #1,Mark De Mesa,09950466591,assets/qr/gcash-option-1.png
+GCASH-002,GCash Option #2,Mark De Mesa,09926020173,assets/qr/gcash-option-2.png
+GCASH-003,GCash Option #3,Kimberly Jill De Mesa,09937418007,assets/qr/gcash-option-3.png
