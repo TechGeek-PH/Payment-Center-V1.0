@@ -319,8 +319,8 @@
       box-shadow: 0 10px 30px rgba(13,59,102,.07);
     }
 
-    .picker-bar,
-    .empty-method-state { display: none !important; }
+    .picker-bar[hidden],
+    .empty-method-state[hidden] { display: none !important; }
 
     .picker-bar {
       display: grid;
@@ -872,14 +872,14 @@
     <main id="top">
       <section class="hero">
         <div class="hero-content">
-          <div class="eyebrow">✓ Official TechGeekPH payment channel</div>
-          <h1>One official QR. Simple and secure.</h1>
-          <p>Scan the GCash QR PH code below, complete your payment, then upload your transaction receipt for billing verification.</p>
-          <div class="only-channel-note">● This is the only payment QR currently available</div>
+          <div class="eyebrow">✓ Official TechGeekPH payment channels</div>
+          <h1>Choose, pay, and submit securely.</h1>
+          <p>Select your preferred bank or e-wallet, verify the recipient details, then upload your transaction receipt for billing verification.</p>
+          <div class="only-channel-note">● 7 official payment channels available</div>
         </div>
         <div class="hero-steps" aria-label="Payment steps">
-          <div class="step"><span class="step-number">1</span><div><strong>Scan the QR</strong><span>Use GCash or a QR PH-supported banking app.</span></div></div>
-          <div class="step"><span class="step-number">2</span><div><strong>Check and pay</strong><span>Verify the recipient before confirming.</span></div></div>
+          <div class="step"><span class="step-number">1</span><div><strong>Choose a channel</strong><span>Select an available bank, e-wallet, or QR PH option.</span></div></div>
+          <div class="step"><span class="step-number">2</span><div><strong>Verify and pay</strong><span>Check the recipient before confirming your payment.</span></div></div>
           <div class="step"><span class="step-number">3</span><div><strong>Upload receipt</strong><span>Submit a clear screenshot for verification.</span></div></div>
         </div>
       </section>
@@ -887,25 +887,25 @@
       <section class="section" id="paymentOptionsSection">
         <div class="section-heading">
           <div>
-            <h2>Official payment QR</h2>
-            <p>For your security, use only the QR code displayed on this page.</p>
+            <h2>Official payment channels</h2>
+            <p>Choose one payment channel and use only the account details shown on this page.</p>
           </div>
-          <div class="status-pill" id="apiStatus"><span class="dot"></span><span>Loading official QR…</span></div>
+          <div class="status-pill" id="apiStatus"><span class="dot"></span><span>Loading payment channels…</span></div>
         </div>
         <div class="payment-method-picker" id="methodPickerPanel">
-          <div class="picker-bar" id="pickerBar" aria-hidden="true">
+          <div class="picker-bar" id="pickerBar">
             <div class="picker-field">
-              <label for="methodPicker">Official QR</label>
+              <label for="methodPicker">Choose bank, e-wallet, or QR PH</label>
               <select class="method-picker-select" id="methodPicker" aria-describedby="methodPickerHelp">
-                <option value="">GCash QR PH</option>
+                <option value="">Select payment channel</option>
               </select>
             </div>
-            <div class="picker-help" id="methodPickerHelp">The official payment QR is selected automatically.</div>
+            <div class="picker-help" id="methodPickerHelp">The QR code and official account details will appear after you select a channel.</div>
           </div>
 
-          <div class="empty-method-state" id="emptyMethodState" aria-hidden="true">
-            <span class="empty-method-icon">✓</span>
-            <span>Loading the official GCash QR PH code.</span>
+          <div class="empty-method-state" id="emptyMethodState">
+            <span class="empty-method-icon">⌄</span>
+            <span>Select a payment channel from the dropdown above.</span>
           </div>
 
           <article class="selected-method-card" id="selectedMethodCard" hidden aria-live="polite"></article>
@@ -1014,9 +1014,9 @@
             </div>
             <div class="panel-body">
               <div class="summary-list">
-                <div class="summary-item"><span>Payment channel</span><strong id="summaryMethod">GCash QR PH</strong></div>
-                <div class="summary-item"><span>Recipient</span><strong id="summaryAccountName">TechGeekPH Arenda</strong></div>
-                <div class="summary-item"><span>Availability</span><strong id="summaryAccountNumber">Only official QR</strong></div>
+                <div class="summary-item"><span>Payment channel</span><strong id="summaryMethod">Not selected</strong></div>
+                <div class="summary-item"><span>Account name</span><strong id="summaryAccountName">—</strong></div>
+                <div class="summary-item"><span>Account number</span><strong id="summaryAccountNumber">—</strong></div>
               </div>
               <div class="notice"><strong>Important:</strong> Never send payment to a number or QR shared outside this official page. Keep your original receipt. All submissions remain <strong>Pending Verification</strong> until checked by the billing team.</div>
             </div>
@@ -1040,16 +1040,65 @@
 
       const config = window.PAYMENT_CENTER_CONFIG || {};
 
-      // The only customer-facing payment channel. Do not merge remote account
-      // lists here: this keeps old or inactive payment options off the page.
+      // Built-in active payment channels. These remain available even if the
+      // Google Apps Script payment-method endpoint is temporarily unavailable.
+      // GCash QR PH intentionally uses the existing GCASH-001 backend slot.
       const BUILT_IN_PAYMENT_METHODS = [
         {
           id: "GCASH-001",
           label: "GCash QR PH",
           accountNumber: "TechGeekPH-Arenda",
           accountName: "TechGeekPH Arenda",
-          qrImageUrl: "assets/qr/gcash-qr-ph.png",
-          notes: "This is the only payment QR currently accepted by TechGeekPH."
+          qrImageUrl: "assets/qr/GCash QR PH.png",
+          notes: "Scan this QR using GCash or any QR PH-supported banking app."
+        },
+        {
+          id: "GOTYME-001",
+          label: "GoTyme Bank",
+          accountNumber: "019772179572",
+          accountName: "Mark Corona De Mesa",
+          qrImageUrl: "assets/qr/gotyme-bank.png",
+          notes: "Scan the QR code or transfer using the account number shown."
+        },
+        {
+          id: "BPI-001",
+          label: "BPI Bank",
+          accountNumber: "9869013474",
+          accountName: "Mark De Mesa",
+          qrImageUrl: "assets/qr/bpi-bank.png",
+          notes: "Scan the QR code or transfer using the account number shown."
+        },
+        {
+          id: "UNIONBANK-001",
+          label: "UnionBank",
+          accountNumber: "109480124887",
+          accountName: "Mark De Mesa",
+          qrImageUrl: "assets/qr/union-bank.png",
+          notes: "Scan the QR code or transfer using the account number shown."
+        },
+        {
+          id: "MARIBANK-001",
+          label: "Mari Bank",
+          accountNumber: "11624449510",
+          accountName: "Mark De Mesa",
+          qrImageUrl: "assets/qr/mari-bank.png",
+          notes: "Scan the QR code or transfer using the account number shown."
+        },
+        {
+          id: "GCASH-002",
+          label: "GCash Option #2",
+          accountNumber: "09926020173",
+          accountName: "Mark De Mesa",
+          qrImageUrl: "assets/qr/gcash-option-2.png",
+          notes: "Scan the QR code or send to the mobile number shown."
+        },
+        {
+          id: "GCASH-003",
+          label: "GCash Option #3",
+          accountNumber: "09937418007",
+          accountName: "Kimberly Jill De Mesa",
+          qrImageUrl: "assets/qr/gcash-option-3.png",
+          notes: "Scan the QR code or send to the mobile number shown."
         }
       ];
 
@@ -1144,7 +1193,7 @@
 
       function loadPaymentMethods() {
         state.methods = normalizeMethods(BUILT_IN_PAYMENT_METHODS);
-        updateApiStatus("Official QR PH · Available", true);
+        updateApiStatus(state.methods.length + " official payment channels · Available", true);
         renderMethods();
       }
 
@@ -1182,14 +1231,15 @@
       }
 
       function renderMethods() {
-        els.methodPicker.innerHTML = '<option value="">GCash QR PH</option>';
-        els.paymentMethod.innerHTML = '';
+        els.methodPicker.innerHTML = '<option value="">Select payment channel</option>';
+        els.paymentMethod.value = "";
         els.selectedMethodCard.hidden = true;
         els.emptyMethodState.hidden = false;
+        els.emptyMethodState.innerHTML = '<span class="empty-method-icon">⌄</span><span>Select a payment channel from the dropdown above.</span>';
 
         if (!state.methods.length) {
           els.methodPicker.disabled = true;
-          els.emptyMethodState.innerHTML = '<span class="empty-method-icon">!</span><span>No payment account is currently available. Please contact the billing team.</span>';
+          els.emptyMethodState.innerHTML = '<span class="empty-method-icon">!</span><span>No payment channel is currently available. Please contact the billing team.</span>';
           return;
         }
 
@@ -1199,7 +1249,6 @@
           option.value = method.id;
           option.textContent = method.label;
           els.methodPicker.appendChild(option);
-          els.paymentMethod.appendChild(option.cloneNode(true));
         });
 
         if (state.methods.length === 1) selectMethod(state.methods[0].id, false);
@@ -1228,8 +1277,8 @@
         els.emptyMethodState.hidden = true;
         renderSelectedMethod(method, theme);
         els.summaryMethod.textContent = method.label;
-        els.summaryAccountName.textContent = method.accountName || "TechGeekPH Arenda";
-        els.summaryAccountNumber.textContent = "Only official QR";
+        els.summaryAccountName.textContent = method.accountName || "—";
+        els.summaryAccountNumber.textContent = method.accountNumber || "—";
 
         if (scrollToForm) {
           document.getElementById("submitPaymentSection").scrollIntoView({ behavior: "smooth", block: "start" });
@@ -1242,7 +1291,7 @@
         els.selectedMethodCard.innerHTML = `
           <div class="selected-method-head">
             <div class="selected-method-name">${escapeHtml(method.label)}</div>
-            <div class="selected-method-tag">Only available QR</div>
+            <div class="selected-method-tag">Available</div>
           </div>
           <div class="selected-method-content">
             <div class="selected-qr-wrap">
@@ -1257,8 +1306,18 @@
               >⇩ Download QR Code</button>` : '<div style="color:#5f6b7a;font-size:12px;text-align:center">QR image will appear here</div>'}
             </div>
             <div class="selected-method-details">
-              <h3 style="margin:0;color:var(--brand-dark);font-size:clamp(22px,3vw,31px);line-height:1.12;letter-spacing:-.6px">Scan, verify, and pay securely.</h3>
-              <p style="margin:9px 0 0;color:var(--muted);font-size:14px">Open GCash or any QR PH-supported banking app, then scan the official code.</p>
+              <h3 style="margin:0;color:var(--brand-dark);font-size:clamp(22px,3vw,31px);line-height:1.12;letter-spacing:-.6px">Verify the details, then pay securely.</h3>
+              <p style="margin:9px 0 14px;color:var(--muted);font-size:14px">Use the selected bank, e-wallet, or any compatible QR scanner. Always confirm the recipient before paying.</p>
+              <div class="detail-row">
+                <span class="detail-label">Account name</span>
+                <span class="detail-value">${escapeHtml(method.accountName || "—")}</span>
+                <button class="icon-btn" type="button" data-copy="${escapeAttribute(method.accountName)}" aria-label="Copy account name">⧉</button>
+              </div>
+              <div class="detail-row">
+                <span class="detail-label">Account no.</span>
+                <span class="detail-value">${escapeHtml(method.accountNumber || "—")}</span>
+                <button class="icon-btn" type="button" data-copy="${escapeAttribute(method.accountNumber)}" aria-label="Copy account number">⧉</button>
+              </div>
               <div class="security-list">
                 <div class="security-item">
                   <span class="security-icon">1</span>
