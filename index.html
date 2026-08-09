@@ -5,6 +5,14 @@
   <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
   <meta name="theme-color" content="#0d3b66">
   <meta name="description" content="TechGeekPH secure payment submission center.">
+  <link rel="icon" type="image/png" href="assets/logo/TechGeekPH-mark.png">
+  <link rel="apple-touch-icon" href="assets/logo/TechGeekPH-logo-square.jpg">
+  <meta property="og:type" content="website">
+  <meta property="og:title" content="Payment Center | TechGeekPH">
+  <meta property="og:description" content="Choose an official TechGeekPH payment channel and submit your receipt for verification.">
+  <meta property="og:url" content="https://techgeek-ph.github.io/Payment-Center-V1.0/">
+  <meta property="og:image" content="https://techgeek-ph.github.io/Payment-Center-V1.0/assets/banner/Banner.png">
+  <meta name="twitter:card" content="summary_large_image">
   <title>Payment Center | TechGeekPH</title>
   <style>
     :root {
@@ -78,7 +86,7 @@
     }
 
     .brand-fallback {
-      display: inline-flex;
+      display: none;
       align-items: center;
       gap: 10px;
       font-weight: 900;
@@ -857,7 +865,15 @@
     <header class="topbar">
       <div class="topbar-inner">
         <a class="brand" href="#top" aria-label="TechGeekPH Payment Center">
-          <span class="brand-fallback" id="brandFallback">
+          <img
+            class="brand-logo"
+            id="brandLogo"
+            src="assets/logo/TechGeekPH-logo.png"
+            alt="TechGeekPH Solutions &amp; Services Inc."
+            decoding="async"
+            onerror="this.hidden=true; document.getElementById('brandFallback').style.display='inline-flex';"
+          >
+          <span class="brand-fallback" id="brandFallback" aria-hidden="true">
             <span class="brand-mark">TG</span>
             <span class="brand-wordmark"><span class="tech">tech</span><span class="geek">geekph</span></span>
           </span>
@@ -870,6 +886,17 @@
     </header>
 
     <main id="top">
+      <div class="promo-banner" aria-label="TechGeekPH payment and internet service banner">
+        <img
+          src="assets/banner/Banner.png"
+          alt="TechGeekPH service banner"
+          loading="eager"
+          decoding="async"
+          fetchpriority="high"
+          onerror="this.closest('.promo-banner').hidden=true;"
+        >
+      </div>
+
       <section class="hero">
         <div class="hero-content">
           <div class="eyebrow">✓ Official TechGeekPH payment channels</div>
