@@ -858,6 +858,614 @@
       .promo-banner { border-radius: 14px; margin-bottom: 14px; }
       .payment-partners { padding: 9px 10px; }
     }
+
+    /* =========================================================
+       TECHGEEKPH DIGITAL FUTURE UI
+       Visual-only enhancement: payment and submission logic stays intact.
+       ========================================================= */
+    :root {
+      --future-bg: #020812;
+      --future-bg-2: #061426;
+      --future-surface: rgba(7, 24, 43, .82);
+      --future-surface-strong: rgba(8, 29, 51, .96);
+      --future-line: rgba(116, 206, 255, .17);
+      --future-line-strong: rgba(40, 207, 255, .42);
+      --future-text: #ecf8ff;
+      --future-muted: #91a9bd;
+      --future-cyan: #20d8ff;
+      --future-blue: #1688ff;
+      --future-violet: #7c5cff;
+      --future-green: #2de2a6;
+      --future-shadow: 0 24px 70px rgba(0, 0, 0, .36);
+    }
+
+    html { color-scheme: dark; }
+
+    body {
+      color: var(--future-text);
+      background:
+        radial-gradient(circle at 8% 5%, rgba(22, 136, 255, .20), transparent 30%),
+        radial-gradient(circle at 92% 12%, rgba(124, 92, 255, .14), transparent 27%),
+        radial-gradient(circle at 55% 84%, rgba(32, 216, 255, .08), transparent 34%),
+        linear-gradient(155deg, #061426 0%, #020812 52%, #04101e 100%);
+      background-attachment: fixed;
+    }
+
+    body::before {
+      content: "";
+      position: fixed;
+      inset: 0;
+      z-index: -2;
+      pointer-events: none;
+      opacity: .36;
+      background-image:
+        linear-gradient(rgba(78, 181, 255, .08) 1px, transparent 1px),
+        linear-gradient(90deg, rgba(78, 181, 255, .08) 1px, transparent 1px);
+      background-size: 42px 42px;
+      mask-image: linear-gradient(to bottom, black, transparent 82%);
+    }
+
+    body::after {
+      content: "";
+      position: fixed;
+      width: 520px;
+      height: 520px;
+      right: -260px;
+      bottom: -260px;
+      z-index: -1;
+      pointer-events: none;
+      border-radius: 50%;
+      background: rgba(32, 216, 255, .08);
+      filter: blur(80px);
+    }
+
+    ::selection { color: #00121f; background: var(--future-cyan); }
+    .page-shell { isolation: isolate; }
+
+    .topbar {
+      border-bottom: 1px solid var(--future-line);
+      background: rgba(2, 10, 20, .82);
+      box-shadow: 0 10px 36px rgba(0, 0, 0, .20);
+      backdrop-filter: blur(22px) saturate(145%);
+    }
+
+    .topbar-inner { min-height: 82px; }
+    .brand-logo {
+      width: 168px;
+      padding: 3px 7px;
+      border-radius: 11px;
+      background: #ffffff;
+      filter: drop-shadow(0 7px 18px rgba(21, 136, 255, .22));
+      transition: transform .22s ease, filter .22s ease;
+    }
+    .brand:hover .brand-logo {
+      transform: translateY(-1px);
+      filter: drop-shadow(0 9px 24px rgba(32, 216, 255, .32));
+    }
+    .brand-meta { border-left-color: rgba(143, 201, 240, .22); color: var(--future-muted); }
+    .brand-meta strong {
+      color: var(--future-text);
+      text-transform: uppercase;
+      letter-spacing: .08em;
+      font-size: 11px;
+    }
+    .brand-meta span { color: #72dcff; }
+
+    .support-link {
+      border-color: var(--future-line);
+      color: var(--future-text);
+      background: rgba(9, 31, 54, .74);
+      box-shadow: inset 0 0 0 1px rgba(255,255,255,.02), 0 10px 28px rgba(0,0,0,.16);
+      transition: transform .18s ease, border-color .18s ease, box-shadow .18s ease;
+    }
+    .support-link:hover {
+      transform: translateY(-2px);
+      border-color: var(--future-line-strong);
+      box-shadow: 0 10px 28px rgba(20, 159, 255, .16);
+    }
+
+    main {
+      width: min(1220px, calc(100% - 32px));
+      padding: 34px 0 72px;
+    }
+
+    .promo-banner {
+      position: relative;
+      border-color: rgba(65, 201, 255, .28);
+      border-radius: 24px;
+      background: #07182a;
+      box-shadow: 0 18px 54px rgba(0,0,0,.30), 0 0 0 1px rgba(255,255,255,.025) inset;
+    }
+    .promo-banner::before {
+      content: "";
+      position: absolute;
+      inset: 0;
+      z-index: 1;
+      pointer-events: none;
+      border-radius: inherit;
+      background: linear-gradient(110deg, rgba(32,216,255,.12), transparent 34%, transparent 70%, rgba(124,92,255,.10));
+      box-shadow: inset 0 1px 0 rgba(255,255,255,.12);
+    }
+    .promo-banner img { filter: saturate(1.08) contrast(1.03); }
+
+    .hero {
+      border: 1px solid rgba(77, 206, 255, .28);
+      padding: 46px;
+      background:
+        radial-gradient(circle at 84% 20%, rgba(32, 216, 255, .24), transparent 25%),
+        radial-gradient(circle at 72% 110%, rgba(124, 92, 255, .30), transparent 36%),
+        linear-gradient(135deg, rgba(5, 27, 49, .98), rgba(5, 17, 34, .98) 58%, rgba(10, 25, 51, .98));
+      box-shadow: var(--future-shadow), inset 0 1px 0 rgba(255,255,255,.08), 0 0 80px rgba(21, 136, 255, .10);
+    }
+    .hero::before {
+      inset: 0;
+      width: auto;
+      height: auto;
+      right: 0;
+      top: 0;
+      bottom: 0;
+      border-radius: inherit;
+      opacity: .42;
+      background-image:
+        linear-gradient(rgba(117, 214, 255, .09) 1px, transparent 1px),
+        linear-gradient(90deg, rgba(117, 214, 255, .09) 1px, transparent 1px);
+      background-size: 34px 34px;
+      mask-image: linear-gradient(90deg, transparent 32%, black);
+    }
+    .hero::after {
+      width: 280px;
+      height: 280px;
+      right: -88px;
+      top: -120px;
+      border: 1px solid rgba(32, 216, 255, .28);
+      background: radial-gradient(circle, rgba(32,216,255,.16), transparent 64%);
+      box-shadow: 0 0 70px rgba(32,216,255,.12);
+    }
+    .hero-content { max-width: 790px; }
+    .eyebrow {
+      border-color: rgba(75, 220, 255, .32);
+      color: #bfefff;
+      background: rgba(23, 164, 222, .10);
+      letter-spacing: .14em;
+      box-shadow: inset 0 0 18px rgba(32,216,255,.04);
+    }
+    .live-signal {
+      width: 8px;
+      height: 8px;
+      border-radius: 50%;
+      background: var(--future-green);
+      box-shadow: 0 0 0 5px rgba(45, 226, 166, .10), 0 0 18px rgba(45, 226, 166, .72);
+      animation: futurePulse 1.8s ease-in-out infinite;
+    }
+    @keyframes futurePulse {
+      0%, 100% { transform: scale(.85); opacity: .78; }
+      50% { transform: scale(1.12); opacity: 1; }
+    }
+    .hero h1 {
+      max-width: 760px;
+      margin-top: 4px;
+      color: transparent;
+      background: linear-gradient(100deg, #ffffff 5%, #9feaff 55%, #a89bff 100%);
+      -webkit-background-clip: text;
+      background-clip: text;
+      text-wrap: balance;
+    }
+    .hero p { color: #b3c8da; }
+    .only-channel-note {
+      border-color: rgba(45,226,166,.22);
+      color: #9ff4d5;
+      background: rgba(45,226,166,.08);
+      box-shadow: 0 0 24px rgba(45,226,166,.05);
+      text-transform: uppercase;
+      letter-spacing: .055em;
+    }
+    .hero-steps { gap: 14px; margin-top: 32px; }
+    .step {
+      border-color: rgba(126, 211, 255, .18);
+      background: rgba(7, 28, 50, .60);
+      box-shadow: inset 0 1px 0 rgba(255,255,255,.045);
+      backdrop-filter: blur(10px);
+      transition: transform .2s ease, border-color .2s ease, background .2s ease;
+    }
+    .step:hover {
+      transform: translateY(-3px);
+      border-color: rgba(32,216,255,.42);
+      background: rgba(10, 40, 68, .72);
+    }
+    .step-number {
+      color: #00111e;
+      background: linear-gradient(135deg, #d9f8ff, #40dfff);
+      box-shadow: 0 0 22px rgba(32,216,255,.24);
+    }
+    .step span { color: #8fa8bc; }
+
+    .section { margin-top: 42px; scroll-margin-top: 105px; }
+    .section-heading h2 {
+      color: var(--future-text);
+      letter-spacing: -.7px;
+    }
+    .section-heading p { color: var(--future-muted); }
+    .status-pill {
+      border-color: var(--future-line);
+      color: #b5cee0;
+      background: rgba(8, 29, 51, .76);
+      box-shadow: inset 0 1px 0 rgba(255,255,255,.04);
+      backdrop-filter: blur(12px);
+    }
+    .status-pill.online { color: #aaf3dc; border-color: rgba(45,226,166,.20); }
+    .status-pill.online .dot {
+      background: var(--future-green);
+      box-shadow: 0 0 0 4px rgba(45,226,166,.10), 0 0 16px rgba(45,226,166,.55);
+    }
+
+    .payment-method-picker {
+      border-color: var(--future-line);
+      background: rgba(5, 20, 37, .82);
+      box-shadow: var(--future-shadow), inset 0 1px 0 rgba(255,255,255,.035);
+      backdrop-filter: blur(18px) saturate(130%);
+    }
+    .picker-bar {
+      padding: 22px;
+      border-bottom-color: rgba(116,206,255,.13);
+      background: linear-gradient(180deg, rgba(13, 43, 70, .66), rgba(6, 23, 41, .44));
+    }
+    .picker-field label {
+      color: #b9d8eb;
+      text-transform: uppercase;
+      letter-spacing: .08em;
+    }
+    .method-picker-select {
+      border-color: color-mix(in srgb, var(--brand, #20d8ff) 48%, #1b3850);
+      color: #f1fbff;
+      background-color: rgba(3, 15, 28, .82);
+      box-shadow: inset 0 1px 0 rgba(255,255,255,.04);
+      color-scheme: dark;
+    }
+    .method-picker-select:focus {
+      box-shadow: 0 0 0 4px color-mix(in srgb, var(--brand, #20d8ff) 18%, transparent), 0 0 22px color-mix(in srgb, var(--brand, #20d8ff) 12%, transparent);
+    }
+    .picker-help { color: var(--future-muted); }
+
+    .channel-grid {
+      display: grid;
+      grid-template-columns: repeat(4, minmax(0, 1fr));
+      gap: 12px;
+      padding: 20px 20px 18px;
+    }
+    .channel-grid[hidden] { display: none !important; }
+    .channel-option {
+      --brand: #1688ff;
+      --brand-dark: #0d3b66;
+      --brand-secondary: #20d8ff;
+      --brand-soft: #edf5ff;
+      position: relative;
+      isolation: isolate;
+      min-width: 0;
+      min-height: 88px;
+      display: grid;
+      grid-template-columns: 46px minmax(0, 1fr) 24px;
+      align-items: center;
+      gap: 11px;
+      padding: 13px;
+      overflow: hidden;
+      border: 1px solid rgba(116,206,255,.15);
+      border-radius: 16px;
+      color: var(--future-text);
+      background: rgba(7, 27, 47, .76);
+      box-shadow: inset 0 1px 0 rgba(255,255,255,.035);
+      cursor: pointer;
+      text-align: left;
+      transition: transform .18s ease, border-color .18s ease, box-shadow .18s ease, background .18s ease;
+    }
+    .channel-option::before {
+      content: "";
+      position: absolute;
+      inset: 0;
+      z-index: -1;
+      opacity: .11;
+      background: radial-gradient(circle at 8% 20%, var(--brand-secondary), transparent 52%);
+      transition: opacity .18s ease;
+    }
+    .channel-option:hover {
+      transform: translateY(-3px);
+      border-color: color-mix(in srgb, var(--brand) 58%, #6edfff);
+      box-shadow: 0 12px 28px color-mix(in srgb, var(--brand) 15%, transparent);
+    }
+    .channel-option:hover::before { opacity: .20; }
+    .channel-option.selected {
+      border-color: color-mix(in srgb, var(--brand) 72%, #b5f3ff);
+      background: color-mix(in srgb, var(--brand-dark) 44%, #071b30);
+      box-shadow: 0 0 0 2px color-mix(in srgb, var(--brand) 14%, transparent), 0 14px 32px color-mix(in srgb, var(--brand) 18%, transparent);
+    }
+    .channel-option.selected::before { opacity: .30; }
+    .channel-option-icon {
+      width: 46px;
+      height: 46px;
+      display: grid;
+      place-items: center;
+      border: 1px solid color-mix(in srgb, var(--brand) 42%, rgba(255,255,255,.16));
+      border-radius: 14px;
+      color: #fff;
+      background: linear-gradient(135deg, var(--brand-dark), var(--brand), var(--brand-secondary));
+      box-shadow: 0 8px 18px color-mix(in srgb, var(--brand) 20%, transparent);
+      font-size: 12px;
+      font-weight: 950;
+      letter-spacing: -.03em;
+    }
+    .channel-option-copy { min-width: 0; }
+    .channel-option-copy strong {
+      display: block;
+      overflow: hidden;
+      color: #eefaff;
+      font-size: 12px;
+      line-height: 1.25;
+      text-overflow: ellipsis;
+      white-space: nowrap;
+    }
+    .channel-option-copy small {
+      display: block;
+      margin-top: 4px;
+      overflow: hidden;
+      color: #7893aa;
+      font-size: 10px;
+      text-overflow: ellipsis;
+      white-space: nowrap;
+    }
+    .channel-option-check {
+      width: 24px;
+      height: 24px;
+      display: grid;
+      place-items: center;
+      border: 1px solid rgba(129,207,255,.16);
+      border-radius: 50%;
+      color: #7893aa;
+      background: rgba(1,12,23,.44);
+      font-size: 0;
+      font-weight: 950;
+    }
+    .channel-option-check::before { content: "›"; font-size: 16px; }
+    .channel-option.selected .channel-option-check {
+      border-color: color-mix(in srgb, var(--brand) 50%, #dffaff);
+      color: #00131f;
+      background: #a9f2ff;
+      box-shadow: 0 0 16px color-mix(in srgb, var(--brand) 38%, transparent);
+    }
+    .channel-option.selected .channel-option-check::before { content: "✓"; font-size: 12px; }
+
+    .empty-method-state {
+      border-color: rgba(116,206,255,.17);
+      color: var(--future-muted);
+      background: rgba(4, 17, 31, .56);
+    }
+    .empty-method-icon { color: var(--future-cyan); background: rgba(32,216,255,.10); }
+
+    .selected-method-card {
+      margin: 0 20px 20px;
+      border-color: color-mix(in srgb, var(--brand) 34%, #cbd8e6);
+      color: #14213d;
+      background: linear-gradient(180deg, rgba(255,255,255,.99), #f4f9ff);
+      box-shadow: 0 22px 56px color-mix(in srgb, var(--brand) 19%, rgba(0,0,0,.24));
+    }
+    .selected-method-card .detail-value { color: #14213d; }
+    .selected-method-card .method-notes { color: #5f6b7a; }
+    .selected-method-head { padding: 17px 20px; }
+    .selected-method-name { letter-spacing: -.25px; }
+    .selected-method-tag {
+      border-color: rgba(255,255,255,.34);
+      background: rgba(255,255,255,.16);
+      text-transform: uppercase;
+      letter-spacing: .07em;
+    }
+    .selected-method-content { padding: 28px; }
+    .selected-qr-wrap {
+      border-style: solid;
+      border-color: color-mix(in srgb, var(--brand) 24%, #cfdeeb);
+      background:
+        linear-gradient(rgba(30,136,229,.045) 1px, transparent 1px),
+        linear-gradient(90deg, rgba(30,136,229,.045) 1px, transparent 1px),
+        var(--brand-soft);
+      background-size: 20px 20px;
+      box-shadow: inset 0 0 28px rgba(255,255,255,.64);
+    }
+    .selected-qr-wrap img {
+      padding: 7px;
+      border: 1px solid rgba(13,59,102,.10);
+      box-shadow: 0 16px 30px rgba(13,59,102,.14);
+    }
+    .download-qr-btn:hover { transform: translateY(-2px); }
+    .continue-method-btn { min-height: 48px; }
+
+    .form-layout { gap: 24px; }
+    .panel {
+      overflow: hidden;
+      border-color: var(--future-line);
+      color: var(--future-text);
+      background: var(--future-surface);
+      box-shadow: var(--future-shadow), inset 0 1px 0 rgba(255,255,255,.035);
+      backdrop-filter: blur(18px) saturate(125%);
+    }
+    .panel-header {
+      border-bottom-color: rgba(116,206,255,.13);
+      background: linear-gradient(180deg, rgba(15,49,78,.48), rgba(6,23,41,.18));
+    }
+    .panel-header h3 { color: #effaff; letter-spacing: -.25px; }
+    .panel-header p { color: var(--future-muted); }
+    .panel-body { background: rgba(3, 15, 28, .20); }
+    .summary-panel {
+      position: sticky;
+      top: 102px;
+    }
+    .field label { color: #c8dfef; }
+    .field-hint, .scan-status, .preview-bar { color: var(--future-muted); }
+    .scan-status.reading { color: #65dcff; }
+    .scan-status.found { color: #74edc4; }
+    .scan-status.not-found { color: #ffd17a; }
+
+    input, select, textarea {
+      border-color: rgba(111, 185, 226, .24);
+      color: #f1faff;
+      background: rgba(2, 13, 25, .68);
+      box-shadow: inset 0 1px 0 rgba(255,255,255,.025);
+      color-scheme: dark;
+    }
+    input::placeholder, textarea::placeholder { color: #587187; opacity: 1; }
+    input:focus, select:focus, textarea:focus {
+      border-color: var(--future-cyan);
+      box-shadow: 0 0 0 4px rgba(32,216,255,.11), 0 0 20px rgba(32,216,255,.06);
+    }
+    input[readonly] { color: #9eb5c7; background: rgba(11, 34, 55, .68); }
+    input[type="checkbox"] { accent-color: var(--future-cyan); }
+    input[type="date"]::-webkit-calendar-picker-indicator { filter: invert(1) opacity(.76); }
+    input:-webkit-autofill,
+    input:-webkit-autofill:hover,
+    input:-webkit-autofill:focus {
+      -webkit-text-fill-color: #f1faff;
+      -webkit-box-shadow: 0 0 0 1000px #071a2e inset;
+      transition: background-color 9999s ease-out;
+    }
+
+    .upload-box {
+      border-color: rgba(87, 199, 255, .32);
+      background:
+        linear-gradient(rgba(48,185,255,.035) 1px, transparent 1px),
+        linear-gradient(90deg, rgba(48,185,255,.035) 1px, transparent 1px),
+        rgba(4, 18, 33, .58);
+      background-size: 24px 24px;
+      transition: border-color .18s ease, background .18s ease, transform .18s ease;
+    }
+    .upload-box:hover {
+      transform: translateY(-2px);
+      border-color: var(--future-cyan);
+      background-color: rgba(8, 36, 61, .72);
+    }
+    .upload-box.dragging { border-color: var(--future-cyan); background: rgba(17,83,119,.28); }
+    .upload-icon {
+      color: #b7f1ff;
+      background: linear-gradient(135deg, rgba(22,136,255,.24), rgba(124,92,255,.20));
+      box-shadow: 0 0 24px rgba(32,216,255,.10);
+    }
+    .upload-copy strong { color: #eaf8ff; }
+    .upload-copy span { color: var(--future-muted); }
+    .preview-image { border-radius: 12px; background: #fff; }
+    .preview-image[hidden],
+    .upload-copy[hidden] { display: none !important; }
+    .remove-file { color: #ff9eaa; background: rgba(255,80,100,.10); }
+
+    .consent {
+      border: 1px solid rgba(116,206,255,.11);
+      color: #95adbf;
+      background: rgba(4, 17, 31, .55);
+    }
+    .submit-btn {
+      min-height: 56px;
+      border: 1px solid rgba(172, 241, 255, .20);
+      background: linear-gradient(115deg, #0b65d8, #16b9f2 52%, #6d58e8);
+      box-shadow: 0 15px 34px rgba(16,148,231,.26), inset 0 1px 0 rgba(255,255,255,.22);
+      text-transform: uppercase;
+      letter-spacing: .055em;
+      transition: transform .18s ease, box-shadow .18s ease, filter .18s ease;
+    }
+    .submit-btn:hover:not(:disabled) {
+      transform: translateY(-2px);
+      filter: brightness(1.06);
+      box-shadow: 0 18px 42px rgba(16,148,231,.34), 0 0 28px rgba(32,216,255,.12);
+    }
+    .submit-btn:active:not(:disabled) { transform: translateY(0) scale(.995); }
+
+    .summary-list { gap: 10px; }
+    .summary-item {
+      border-color: rgba(116,206,255,.13);
+      background: rgba(3, 16, 30, .58);
+    }
+    .summary-item span { color: #7992a8; text-transform: uppercase; letter-spacing: .065em; }
+    .summary-item strong { color: #eaf8ff; }
+    .notice {
+      border: 1px solid rgba(255,198,91,.16);
+      color: #ebcca0;
+      background: rgba(137,82,0,.14);
+    }
+    .success-card { border-color: rgba(45,226,166,.28); background: rgba(45,226,166,.10); color: #9ff4d5; }
+    .error-card { border-color: rgba(255,83,105,.30); background: rgba(255,83,105,.10); color: #ffb0ba; }
+
+    footer {
+      width: min(1220px, calc(100% - 32px));
+      color: #678197;
+      border-top: 1px solid rgba(116,206,255,.09);
+    }
+    footer strong { color: #aac9dc; }
+    .toast {
+      border: 1px solid rgba(90,218,255,.24);
+      color: #eaf8ff;
+      background: rgba(3,17,31,.94);
+      box-shadow: 0 18px 44px rgba(0,0,0,.38), 0 0 24px rgba(32,216,255,.08);
+      backdrop-filter: blur(14px);
+    }
+
+    @media (max-width: 1040px) {
+      .channel-grid { grid-template-columns: repeat(3, minmax(0, 1fr)); }
+    }
+
+    @media (max-width: 980px) {
+      .summary-panel { position: static; }
+    }
+
+    @media (max-width: 720px) {
+      body::before { background-size: 32px 32px; opacity: .26; }
+      main { padding-top: 18px; }
+      .topbar-inner { min-height: 70px; }
+      .brand-logo { width: 132px; padding: 2px 5px; border-radius: 9px; }
+      .hero { padding: 30px 21px; }
+      .hero h1 { font-size: clamp(36px, 12vw, 52px); }
+      .hero-steps { gap: 9px; }
+      .step:hover, .channel-option:hover, .upload-box:hover { transform: none; }
+      .picker-bar { padding: 16px; }
+      .channel-grid {
+        grid-template-columns: none;
+        grid-auto-flow: column;
+        grid-auto-columns: minmax(244px, 82%);
+        gap: 9px;
+        padding: 14px 12px;
+        overflow-x: auto;
+        overscroll-behavior-inline: contain;
+        scroll-snap-type: inline mandatory;
+        scrollbar-width: thin;
+        scrollbar-color: rgba(32,216,255,.38) rgba(4,17,31,.32);
+      }
+      .channel-grid::-webkit-scrollbar { height: 6px; }
+      .channel-grid::-webkit-scrollbar-track { background: rgba(4,17,31,.32); }
+      .channel-grid::-webkit-scrollbar-thumb { border-radius: 999px; background: rgba(32,216,255,.38); }
+      .channel-option {
+        min-height: 78px;
+        grid-template-columns: 40px minmax(0,1fr) 20px;
+        gap: 8px;
+        padding: 10px;
+        border-radius: 14px;
+        scroll-snap-align: start;
+      }
+      .channel-option-icon { width: 40px; height: 40px; border-radius: 12px; }
+      .selected-method-card { margin: 0 12px 12px; }
+      .selected-method-content { padding: 14px; }
+      .panel { border-radius: 17px; }
+      .submit-btn { position: relative; min-height: 58px; }
+    }
+
+    @media (max-width: 460px) {
+      .channel-grid { grid-auto-columns: minmax(242px, 88%); }
+      .channel-option { min-height: 70px; }
+      .hero { border-radius: 20px; }
+      .promo-banner { border-radius: 16px; }
+      .only-channel-note { border-radius: 14px; align-items: flex-start; }
+    }
+
+    @media (prefers-reduced-motion: reduce) {
+      html { scroll-behavior: auto; }
+      *, *::before, *::after {
+        animation-duration: .01ms !important;
+        animation-iteration-count: 1 !important;
+        transition-duration: .01ms !important;
+        scroll-behavior: auto !important;
+      }
+    }
   </style>
 </head>
 <body>
@@ -899,15 +1507,15 @@
 
       <section class="hero">
         <div class="hero-content">
-          <div class="eyebrow">✓ Official TechGeekPH payment channels</div>
-          <h1>Choose, pay, and submit securely.</h1>
-          <p>Select your preferred bank or e-wallet, verify the recipient details, then upload your transaction receipt for billing verification.</p>
-          <div class="only-channel-note">● 7 official payment channels available</div>
+          <div class="eyebrow"><span class="live-signal" aria-hidden="true"></span> Secure payment gateway</div>
+          <h1>Pay smarter. Stay connected.</h1>
+          <p>Choose an official bank, e-wallet, or QR PH channel, confirm the recipient, and submit your receipt in one secure flow.</p>
+          <div class="only-channel-note">System online · 7 verified payment channels</div>
         </div>
         <div class="hero-steps" aria-label="Payment steps">
-          <div class="step"><span class="step-number">1</span><div><strong>Choose a channel</strong><span>Select an available bank, e-wallet, or QR PH option.</span></div></div>
-          <div class="step"><span class="step-number">2</span><div><strong>Verify and pay</strong><span>Check the recipient before confirming your payment.</span></div></div>
-          <div class="step"><span class="step-number">3</span><div><strong>Upload receipt</strong><span>Submit a clear screenshot for verification.</span></div></div>
+          <div class="step"><span class="step-number">01</span><div><strong>Select channel</strong><span>Tap your preferred official payment option.</span></div></div>
+          <div class="step"><span class="step-number">02</span><div><strong>Verify &amp; pay</strong><span>Confirm the recipient and payment amount.</span></div></div>
+          <div class="step"><span class="step-number">03</span><div><strong>Submit proof</strong><span>Upload a clear receipt for verification.</span></div></div>
         </div>
       </section>
 
@@ -927,12 +1535,14 @@
                 <option value="">Select payment channel</option>
               </select>
             </div>
-            <div class="picker-help" id="methodPickerHelp">The QR code and official account details will appear after you select a channel.</div>
+            <div class="picker-help" id="methodPickerHelp">Tap a quick-select card below or use the dropdown. The QR and account details update instantly.</div>
           </div>
+
+          <div class="channel-grid" id="channelGrid" aria-label="Quick payment channel selector"></div>
 
           <div class="empty-method-state" id="emptyMethodState">
             <span class="empty-method-icon">⌄</span>
-            <span>Select a payment channel from the dropdown above.</span>
+            <span>Select a payment channel to view its verified QR and account details.</span>
           </div>
 
           <article class="selected-method-card" id="selectedMethodCard" hidden aria-live="polite"></article>
@@ -1143,6 +1753,7 @@
       const els = {
         methodPickerPanel: document.getElementById("methodPickerPanel"),
         pickerBar: document.getElementById("pickerBar"),
+        channelGrid: document.getElementById("channelGrid"),
         methodPicker: document.getElementById("methodPicker"),
         emptyMethodState: document.getElementById("emptyMethodState"),
         selectedMethodCard: document.getElementById("selectedMethodCard"),
@@ -1259,13 +1870,16 @@
 
       function renderMethods() {
         els.methodPicker.innerHTML = '<option value="">Select payment channel</option>';
+        els.channelGrid.innerHTML = "";
+        els.channelGrid.hidden = false;
         els.paymentMethod.value = "";
         els.selectedMethodCard.hidden = true;
         els.emptyMethodState.hidden = false;
-        els.emptyMethodState.innerHTML = '<span class="empty-method-icon">⌄</span><span>Select a payment channel from the dropdown above.</span>';
+        els.emptyMethodState.innerHTML = '<span class="empty-method-icon">⌄</span><span>Select a payment channel to view its verified QR and account details.</span>';
 
         if (!state.methods.length) {
           els.methodPicker.disabled = true;
+          els.channelGrid.hidden = true;
           els.emptyMethodState.innerHTML = '<span class="empty-method-icon">!</span><span>No payment channel is currently available. Please contact the billing team.</span>';
           return;
         }
@@ -1276,9 +1890,55 @@
           option.value = method.id;
           option.textContent = method.label;
           els.methodPicker.appendChild(option);
+          els.channelGrid.appendChild(createChannelCard(method));
         });
 
-        if (state.methods.length === 1) selectMethod(state.methods[0].id, false);
+        const preferredMethod = state.methods.find(method => method.id === "GCASH-001") || state.methods[0];
+        selectMethod(preferredMethod.id, false);
+      }
+
+      function createChannelCard(method) {
+        const theme = getMethodTheme(method);
+        const button = document.createElement("button");
+        button.type = "button";
+        button.className = "channel-option";
+        button.dataset.methodId = method.id;
+        button.setAttribute("aria-pressed", "false");
+        button.setAttribute("aria-label", "Select " + method.label);
+        applyTheme(button, theme);
+
+        const icon = document.createElement("span");
+        icon.className = "channel-option-icon";
+        icon.textContent = getMethodMonogram(method.label);
+
+        const copy = document.createElement("span");
+        copy.className = "channel-option-copy";
+        const title = document.createElement("strong");
+        title.textContent = method.label;
+        const hint = document.createElement("small");
+        const digits = method.accountNumber.replace(/\D/g, "");
+        hint.textContent = method.id === "GCASH-001"
+          ? "QR PH enabled"
+          : (digits ? "Account •••• " + digits.slice(-4) : "Tap to view details");
+        copy.append(title, hint);
+
+        const check = document.createElement("span");
+        check.className = "channel-option-check";
+        check.setAttribute("aria-hidden", "true");
+
+        button.append(icon, copy, check);
+        button.addEventListener("click", () => selectMethod(method.id, false));
+        return button;
+      }
+
+      function getMethodMonogram(label) {
+        const value = String(label || "").toLowerCase();
+        if (value.includes("bpi")) return "BPI";
+        if (value.includes("union")) return "UB";
+        if (value.includes("gotyme")) return "Go";
+        if (value.includes("mari")) return "MB";
+        if (value.includes("gcash")) return "G";
+        return String(label || "PAY").replace(/[^a-z0-9]/gi, "").slice(0, 3).toUpperCase() || "PAY";
       }
 
       function selectMethod(methodId, scrollToForm) {
@@ -1286,6 +1946,11 @@
         state.selectedMethodId = method ? method.id : "";
         els.methodPicker.value = state.selectedMethodId;
         els.paymentMethod.value = state.selectedMethodId;
+        els.channelGrid.querySelectorAll(".channel-option").forEach(button => {
+          const selected = button.dataset.methodId === state.selectedMethodId;
+          button.classList.toggle("selected", selected);
+          button.setAttribute("aria-pressed", String(selected));
+        });
 
         const theme = getMethodTheme(method);
         applyTheme(els.methodPickerPanel, theme);
