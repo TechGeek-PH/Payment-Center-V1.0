@@ -175,6 +175,7 @@ window.PAYMENT_CENTER_CONFIG = Object.freeze({
     }
 
     card.innerHTML = `
+      <span id="tgGcashOption1CardMarker" hidden></span>
       <div class="selected-method-head">
         <div class="selected-method-name">${escapeHtml(GCASH_OPTION_1.label)}</div>
         <div class="selected-method-tag">Available</div>
@@ -198,10 +199,10 @@ window.PAYMENT_CENTER_CONFIG = Object.freeze({
             <button class="icon-btn" type="button" data-tg-copy="${escapeHtml(GCASH_OPTION_1.accountNumber)}" aria-label="Copy account number">⧉</button>
           </div>
           <p class="method-notes">${escapeHtml(GCASH_OPTION_1.notes)}</p>
-          <div style="margin:16px 0;padding:14px;border:1px solid rgba(53,167,255,.28);border-radius:14px;background:rgba(8,119,232,.08);color:var(--future-text,#ecf8ff);font-size:13px;line-height:1.55">
+          <div class="tg-messenger-note" style="margin:16px 0;padding:14px;border:1px solid rgba(53,167,255,.28);border-radius:14px;background:rgba(8,119,232,.08);color:var(--future-text,#ecf8ff);font-size:13px;line-height:1.55">
             <strong>After payment:</strong> Bumalik po sa TechGeekPH Messenger at ipadala ang <strong>payment screenshot</strong> o <strong>reference number</strong> para ma-verify ang inyong payment.
           </div>
-          <button class="continue-method-btn" id="continueMethodButton" type="button">I’ve paid — send screenshot / reference via Messenger</button>
+          <button class="continue-method-btn" id="continueMethodButton" data-tg-custom="1" data-tg-messenger-patched="1" type="button">I’ve paid — send screenshot / reference via Messenger</button>
         </div>
       </div>`;
 
@@ -254,10 +255,13 @@ window.PAYMENT_CENTER_CONFIG = Object.freeze({
 
   function updateSelectedMethodCard() {
     const card = document.getElementById("selectedMethodCard");
-    if (!card || card.hidden || card.querySelector(`[data-method-id="${GCASH_OPTION_1.id}"]`)) return;
+    if (!card || card.hidden || card.querySelector("#tgGcashOption1CardMarker")) return;
 
     const button = card.querySelector("#continueMethodButton");
-    if (button) button.textContent = "I’ve paid — send screenshot / reference via Messenger";
+    if (!button || button.dataset.tgMessengerPatched === "1") return;
+
+    button.dataset.tgMessengerPatched = "1";
+    button.textContent = "I’ve paid — send screenshot / reference via Messenger";
 
     const securityItems = card.querySelectorAll(".security-item");
     if (securityItems.length) {
@@ -268,7 +272,7 @@ window.PAYMENT_CENTER_CONFIG = Object.freeze({
       if (span) span.textContent = "After payment, send the screenshot or reference number through Messenger.";
     }
 
-    if (button && !card.querySelector(".tg-messenger-note")) {
+    if (!card.querySelector(".tg-messenger-note")) {
       const note = document.createElement("div");
       note.className = "tg-messenger-note";
       note.style.cssText = "margin:16px 0;padding:14px;border:1px solid rgba(53,167,255,.28);border-radius:14px;background:rgba(8,119,232,.08);color:var(--future-text,#ecf8ff);font-size:13px;line-height:1.55";
