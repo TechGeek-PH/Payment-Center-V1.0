@@ -192,8 +192,24 @@ function tgpmGatewayStatus_() {
 
   try {
     const spreadsheet = tgpmBillingSpreadsheet_();
-    if (!spreadsheet.getSheetByName(TGPM.CLIENTS_SHEET)) missing.push(TGPM.CLIENTS_SHEET + ' sheet');
-    if (!spreadsheet.getSheetByName(TGPM.LEDGER_SHEET)) missing.push(TGPM.LEDGER_SHEET + ' sheet');
+    const clientsSheet = spreadsheet.getSheetByName(TGPM.CLIENTS_SHEET);
+    const ledgerSheet = spreadsheet.getSheetByName(TGPM.LEDGER_SHEET);
+    if (!clientsSheet) {
+      missing.push(TGPM.CLIENTS_SHEET + ' sheet');
+    } else {
+      const clientsMap = tgpmHeaderMap_(clientsSheet);
+      if (!tgpmFindColumn_(clientsMap, ['accountno', 'accountnumber'])) missing.push('Clients.Account No.');
+      if (!tgpmFindColumn_(clientsMap, ['clientname', 'subscribername', 'name'])) missing.push('Clients.Client Name');
+      if (!tgpmFindColumn_(clientsMap, ['phone', 'contactnumber', 'mobilenumber'])) missing.push('Clients.Phone');
+    }
+    if (!ledgerSheet) {
+      missing.push(TGPM.LEDGER_SHEET + ' sheet');
+    } else {
+      const ledgerMap = tgpmHeaderMap_(ledgerSheet);
+      if (!tgpmFindColumn_(ledgerMap, ['billingid'])) missing.push('Billing Ledger.billing_id');
+      if (!tgpmFindColumn_(ledgerMap, ['accountno', 'accountnumber'])) missing.push('Billing Ledger.account_no');
+      if (!tgpmFindColumn_(ledgerMap, ['amountdue', 'currentbill', 'monthlybill'])) missing.push('Billing Ledger.amount_due');
+    }
     if (!spreadsheet.getSheetByName(TGPM.TRANSACTIONS_SHEET)) missing.push(TGPM.TRANSACTIONS_SHEET + ' sheet');
   } catch (error) {
     if (missing.indexOf('billing spreadsheet') === -1) missing.push('billing spreadsheet access');
@@ -336,9 +352,13 @@ function tgpmCreateCheckout_(payload) {
     const checkoutAttributes = checkout.attributes || {};
     const checkoutId = tgpmClean_(checkout.id, 120);
     const checkoutUrl = tgpmClean_(checkoutAttributes.checkout_url, 1000);
+    const checkoutIsLive = checkoutAttributes.livemode === true;
 
     if (!/^cs_[A-Za-z0-9_-]+$/.test(checkoutId) || !/^https:\/\/checkout\.paymongo\.com\//i.test(checkoutUrl)) {
       throw new Error('PayMongo did not return a valid checkout session.');
+    }
+    if ((gateway.mode === 'live') !== checkoutIsLive) {
+      throw new Error('PayMongo checkout mode does not match the configured API key.');
     }
 
     tgpmUpdateTransaction_(transactionId, {
@@ -429,8 +449,12 @@ function tgpmReconcileTransaction_(transactionId, internalCall) {
   const checkout = response && response.data ? response.data : {};
   const attributes = checkout.attributes || {};
   const returnedReference = tgpmClean_(attributes.reference_number, 80).toUpperCase();
+  const checkoutIsLive = attributes.livemode === true;
   if (returnedReference && returnedReference !== transaction.transactionId) {
     throw new Error('PayMongo reference mismatch. Payment was not posted.');
+  }
+  if ((transaction.mode === 'live') !== checkoutIsLive) {
+    throw new Error('PayMongo mode mismatch. Payment was not posted.');
   }
 
   const payments = Array.isArray(attributes.payments) ? attributes.payments : [];
@@ -512,6 +536,7 @@ function tgpmApplyPaymentToLedger_(transaction, creditAmount, paidPayment) {
   const referenceColumn = tgpmFindColumn_(map, ['paymentreference', 'referencenumber', 'reference']);
   const methodColumn = tgpmFindColumn_(map, ['paymentmethod']);
   const lastUpdatedColumn = tgpmFindColumn_(map, ['lastupdated']);
+  const billingStatusColumn = statusColumn;
 
   const billingIds = tgpmParseJsonArray_(transaction.billingIds);
   const values = sheet.getDataRange().getValues();
@@ -537,6 +562,8 @@ function tgpmApplyPaymentToLedger_(transaction, creditAmount, paidPayment) {
     const currentPaid = tgpmMoney_(row[amountPaidColumn - 1]);
     const storedBalance = tgpmMoney_(row[balanceColumn - 1]);
     const currentBalance = storedBalance > 0 ? storedBalance : Math.max(0, amountDue - currentPaid);
+    const currentStatus = tgpmClean_(row[billingStatusColumn - 1], 60).toUpperCase();
+    if (['PAID', 'VOID', 'VOIDED', 'CANCELLED', 'WAIVED'].indexOf(currentStatus) !== -1) return;
     if (currentBalance <= 0.005) return;
 
     const allocation = tgpmRoundMoney_(Math.min(currentBalance, remaining));
@@ -548,7 +575,13 @@ function tgpmApplyPaymentToLedger_(transaction, creditAmount, paidPayment) {
     sheet.getRange(rowNumber, balanceColumn).setValue(newBalance);
     sheet.getRange(rowNumber, statusColumn).setValue(newStatus);
     if (lastPaymentColumn) sheet.getRange(rowNumber, lastPaymentColumn).setValue(now);
-    if (referenceColumn) sheet.getRange(rowNumber, referenceColumn).setValue(reference);
+    if (referenceColumn) {
+      const existingReference = tgpmClean_(row[referenceColumn - 1], 900);
+      const nextReference = existingReference && existingReference.indexOf(reference) === -1
+        ? existingReference + '; ' + reference
+        : existingReference || reference;
+      sheet.getRange(rowNumber, referenceColumn).setValue(nextReference);
+    }
     if (methodColumn) sheet.getRange(rowNumber, methodColumn).setValue('PayMongo · ' + paymentMethod.toUpperCase());
     if (lastUpdatedColumn) sheet.getRange(rowNumber, lastUpdatedColumn).setValue(now);
 
@@ -723,18 +756,27 @@ function tgpmEnsureBillingLedgerColumns_() {
   const spreadsheet = tgpmBillingSpreadsheet_();
   const sheet = spreadsheet.getSheetByName(TGPM.LEDGER_SHEET);
   if (!sheet) throw new Error(TGPM.LEDGER_SHEET + ' sheet was not found.');
-  const required = [
-    ['amountpaid', 'amount_paid'],
-    ['balance', 'balance'],
-    ['billingstatus', 'billing_status'],
-    ['lastpaymentdate', 'last_payment_date'],
-    ['paymentreference', 'payment_reference'],
-    ['paymentmethod', 'payment_method'],
-    ['lastupdated', 'last_updated']
+  const core = [
+    [['billingid'], 'billing_id'],
+    [['accountno', 'accountnumber'], 'account_no'],
+    [['amountdue', 'currentbill', 'monthlybill'], 'amount_due']
   ];
   let map = tgpmHeaderMap_(sheet);
+  core.forEach(item => {
+    if (!tgpmFindColumn_(map, item[0])) throw new Error('Missing required column in Billing Ledger: ' + item[1]);
+  });
+
+  const required = [
+    [['amountpaid'], 'amount_paid'],
+    [['balance'], 'balance'],
+    [['billingstatus', 'paymentstatus'], 'billing_status'],
+    [['lastpaymentdate', 'paymentdate'], 'last_payment_date'],
+    [['paymentreference', 'referencenumber'], 'payment_reference'],
+    [['paymentmethod'], 'payment_method'],
+    [['lastupdated'], 'last_updated']
+  ];
   required.forEach(item => {
-    if (!map[item[0]]) {
+    if (!tgpmFindColumn_(map, item[0])) {
       sheet.getRange(1, sheet.getLastColumn() + 1).setValue(item[1]);
       map = tgpmHeaderMap_(sheet);
     }
@@ -1044,4 +1086,3 @@ function tgpmClean_(value, maxLength) {
 function tgpmSafeError_(error) {
   return tgpmClean_(error && error.message ? error.message : String(error || 'Unexpected error'), 500);
 }
-
