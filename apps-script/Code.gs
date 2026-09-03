@@ -205,6 +205,10 @@ function doGet(e) {
       });
     }
 
+    if (action === 'paymentGatewayStatus') {
+      return jsonOutput_(tgpmGatewayStatus_());
+    }
+
     if (action === 'getPaymentMethods') {
       // Automatically add any default payment option that is missing from
       // the Payment Methods sheet. This keeps newly added banks visible even
@@ -232,12 +236,15 @@ function doPost(e) {
     const payload = parsePayload_(e);
     const action = cleanText_(payload.action, 50);
 
-    if (action !== 'submitPayment') {
-      return jsonOutput_({ ok: false, message: 'Unknown API action: ' + action });
+    if (['lookupBillingAccount', 'createPayMongoCheckout', 'checkPayMongoStatus'].indexOf(action) !== -1) {
+      return jsonOutput_(tgpmHandlePostAction_(action, payload));
     }
 
-    const result = submitPayment_(payload);
-    return jsonOutput_(result);
+    if (action === 'submitPayment') {
+      return jsonOutput_(submitPayment_(payload));
+    }
+
+    return jsonOutput_({ ok: false, message: 'Unknown API action: ' + action });
   } catch (error) {
     console.error(error && error.stack ? error.stack : error);
     return jsonOutput_({ ok: false, message: safeErrorMessage_(error) });
