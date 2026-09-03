@@ -108,3 +108,22 @@ The page merges the Google Sheet payment methods with the built-in list, so Mari
 ## QR Download
 
 The selected payment account card now includes a **Download QR Code** button. It downloads the current bank or e-wallet QR image using the payment option name and account number as the file name.
+
+
+## Centralized PayMongo checkout (test mode first)
+
+This branch adds a gateway-backed billing flow without removing the existing manual payment channels.
+
+- Verifies the TechGeekPH account number against the full registered 11-digit mobile number in the `Clients` tab.
+- Reads the payable amount directly from `Billing Ledger`; the browser cannot choose or alter the amount.
+- Lets the client select an enabled PayMongo method such as GCash or QR Ph.
+- Creates a PayMongo Hosted Checkout session and redirects the client to the secure checkout.
+- Confirms payment through PayMongo's authenticated API before changing any billing record.
+- Automatically allocates confirmed payments to the oldest open billing records.
+- Updates `amount_paid`, `balance`, `billing_status`, payment reference, method, and timestamps.
+- Uses a five-minute reconciliation trigger when a client does not return to the success page.
+- Preserves the current manual QR/Messenger workflow whenever the gateway is disabled or not configured.
+
+The PayMongo secret key is stored only in Apps Script Properties through a private Google prompt. Do not commit any `sk_test_` or `sk_live_` key.
+
+Follow [apps-script/PAYMONGO_SETUP.md](apps-script/PAYMONGO_SETUP.md) for test-mode setup, verification, and controlled live activation.
