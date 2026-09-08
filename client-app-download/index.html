@@ -6,7 +6,7 @@
 <meta name="theme-color" content="#0b5f8a">
 <title>TechGeekPH Client App</title>
 <style>
-*{box-sizing:border-box}body{margin:0;font-family:Arial,Helvetica,sans-serif;background:linear-gradient(160deg,#eaf5fb,#fff 50%,#eef6fa);color:#173247;min-height:100vh}.container{width:min(760px,92%);margin:auto;padding:28px 0 48px}.logo-wrap{text-align:center;margin-bottom:20px}.logo{width:min(560px,96%);height:auto}.card{background:#fff;border-radius:24px;padding:30px;box-shadow:0 18px 50px rgba(21,48,68,.12);border:1px solid rgba(11,95,138,.08);text-align:center}h1{margin:0 0 10px;font-size:30px;color:#0b5f8a}.subtitle{margin:0 auto 24px;max-width:560px;color:#6a7f8f;line-height:1.6}.btn{display:block;max-width:460px;width:100%;margin:12px auto;padding:16px 18px;border-radius:14px;text-decoration:none;font-weight:800;font-size:16px;cursor:pointer}.download{background:#0b5f8a;color:#fff;border:0}.portal{border:2px solid #0b5f8a;color:#0b5f8a;background:#f8fcfe}.steps{text-align:left;margin-top:28px;display:grid;gap:12px}.step{background:#f4f8fb;padding:14px 16px;border-radius:14px;line-height:1.45;font-size:14px}.step b{color:#0b5f8a}.note{margin-top:18px;padding:13px 15px;border-radius:14px;background:#fff7ed;border:1px solid #fed7aa;color:#8a4b08;font-size:13px;line-height:1.5}#status{min-height:20px;margin-top:10px;color:#587080;font-size:13px}footer{text-align:center;margin-top:18px;color:#748794;font-size:12px}@media(max-width:560px){.card{padding:22px 16px}h1{font-size:25px}.container{padding-top:18px}}
+*{box-sizing:border-box}body{margin:0;font-family:Arial,Helvetica,sans-serif;background:linear-gradient(160deg,#eaf5fb,#fff 50%,#eef6fa);color:#173247;min-height:100vh}.container{width:min(760px,92%);margin:auto;padding:28px 0 48px}.logo-wrap{text-align:center;margin-bottom:20px}.logo{width:min(560px,96%);height:auto}.card{background:#fff;border-radius:24px;padding:30px;box-shadow:0 18px 50px rgba(21,48,68,.12);border:1px solid rgba(11,95,138,.08);text-align:center}h1{margin:0 0 10px;font-size:30px;color:#0b5f8a}.subtitle{margin:0 auto 24px;max-width:560px;color:#6a7f8f;line-height:1.6}.btn{display:block;max-width:460px;width:100%;margin:12px auto;padding:16px 18px;border-radius:14px;text-decoration:none;font-weight:800;font-size:16px}.download{background:#0b5f8a;color:#fff}.portal{border:2px solid #0b5f8a;color:#0b5f8a;background:#f8fcfe}.steps{text-align:left;margin-top:28px;display:grid;gap:12px}.step{background:#f4f8fb;padding:14px 16px;border-radius:14px;line-height:1.45;font-size:14px}.step b{color:#0b5f8a}.note{margin-top:18px;padding:13px 15px;border-radius:14px;background:#eef8fc;border:1px solid #cfe8f3;color:#31596c;font-size:13px;line-height:1.5}footer{text-align:center;margin-top:18px;color:#748794;font-size:12px}@media(max-width:560px){.card{padding:22px 16px}h1{font-size:25px}.container{padding-top:18px}}
 </style>
 </head>
 <body>
@@ -14,49 +14,18 @@
 <div class="logo-wrap"><img class="logo" src="../assets/logo/TechGeekPH-logo.png" alt="TechGeekPH Solutions & Services Inc."></div>
 <section class="card">
 <h1>TechGeekPH Client App</h1>
-<p class="subtitle">Download the TechGeekPH Client Android app for a fullscreen client portal experience.</p>
-<button class="btn download" id="downloadBtn" type="button">Download Android APK</button>
-<div id="status"></div>
+<p class="subtitle">Download the corrected Android APK for a fullscreen TechGeekPH Client Portal experience.</p>
+<a class="btn download" href="TechGeekPH-Client-v3.0.0.apk" download="TechGeekPH-Client-v3.0.0.apk">Download Android APK v3.0.0</a>
 <a class="btn portal" href="https://client.network-techgeekph.com/" target="_blank" rel="noopener">Open Client Portal</a>
 <div class="steps">
-<div class="step"><b>1.</b> Tap <b>Download Android APK</b>.</div>
-<div class="step"><b>2.</b> Open the downloaded APK file.</div>
-<div class="step"><b>3.</b> Allow installation from your browser or Files app if Android asks.</div>
-<div class="step"><b>4.</b> Install and open <b>TechGeekPH Client</b>.</div>
+<div class="step"><b>1.</b> Tap <b>Download Android APK v3.0.0</b>.</div>
+<div class="step"><b>2.</b> Open the downloaded file from Downloads.</div>
+<div class="step"><b>3.</b> If Android asks, allow your browser or Files app to install unknown apps.</div>
+<div class="step"><b>4.</b> Tap <b>Install</b>, then open <b>TechGeekPH Client</b>.</div>
 </div>
-<div class="note">Android direct-download version. If your phone blocks installation, enable permission to install unknown apps for the browser or Files app you used.</div>
+<div class="note">Corrected build: the APK file is now hosted as the actual Android package, not a generated/download placeholder.</div>
 </section>
 <footer>© TechGeekPH Solutions &amp; Services Inc.</footer>
 </main>
-<script>
-const btn=document.getElementById('downloadBtn');
-const status=document.getElementById('status');
-btn.addEventListener('click',async()=>{
-  btn.disabled=true;
-  status.textContent='Preparing APK download...';
-  try{
-    const r=await fetch('TechGeekPH-Client-v2.0.0.apk.b64',{cache:'no-store'});
-    if(!r.ok) throw new Error('Download source unavailable');
-    const b64=(await r.text()).trim();
-    const binary=atob(b64);
-    const bytes=new Uint8Array(binary.length);
-    for(let i=0;i<binary.length;i++) bytes[i]=binary.charCodeAt(i);
-    const blob=new Blob([bytes],{type:'application/vnd.android.package-archive'});
-    const url=URL.createObjectURL(blob);
-    const a=document.createElement('a');
-    a.href=url;
-    a.download='TechGeekPH-Client-v2.0.0.apk';
-    document.body.appendChild(a);
-    a.click();
-    a.remove();
-    setTimeout(()=>URL.revokeObjectURL(url),10000);
-    status.textContent='APK download started.';
-  }catch(e){
-    status.textContent='Unable to prepare the APK. Please try again.';
-  }finally{
-    btn.disabled=false;
-  }
-});
-</script>
 </body>
 </html>
