@@ -61,6 +61,8 @@ jobs:
         run: |
           git config user.name "TechGeekPH Build Bot"
           git config user.email "137922253+TechGeek-PH@users.noreply.github.com"
+          git fetch origin main
+          git rebase origin/main
           git add chat-support-download/TechGeekPH-Chat-Support-v1.0.0.apk
           if ! git diff --cached --quiet; then
             git commit -m "Publish TechGeekPH Chat Support v1 APK"
