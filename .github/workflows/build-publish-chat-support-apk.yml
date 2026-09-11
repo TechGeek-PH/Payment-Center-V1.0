@@ -1,0 +1,68 @@
+name: Build and Publish TechGeekPH Chat Support APK
+
+on:
+  push:
+    branches:
+      - main
+    paths:
+      - 'android-chat-support/**'
+      - '.github/workflows/build-publish-chat-support-apk.yml'
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+jobs:
+  build-and-publish:
+    runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: android-chat-support
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Set up JDK 17
+        uses: actions/setup-java@v4
+        with:
+          distribution: temurin
+          java-version: '17'
+
+      - name: Set up Gradle
+        uses: gradle/actions/setup-gradle@v4
+        with:
+          gradle-version: '8.9'
+
+      - name: Build installable APK
+        run: gradle :app:assembleDebug --no-daemon
+
+      - name: Verify APK signature
+        run: |
+          APKSIGNER=$(find "$ANDROID_HOME/build-tools" -name apksigner | sort -V | tail -1)
+          "$APKSIGNER" verify --verbose app/build/outputs/apk/debug/app-debug.apk
+
+      - name: Copy APK to public download folder
+        working-directory: .
+        run: |
+          mkdir -p chat-support-download
+          cp android-chat-support/app/build/outputs/apk/debug/app-debug.apk chat-support-download/TechGeekPH-Chat-Support-v1.0.0.apk
+
+      - name: Upload workflow artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: TechGeekPH-Chat-Support-v1.0.0
+          path: android-chat-support/app/build/outputs/apk/debug/app-debug.apk
+
+      - name: Commit exact APK binary
+        working-directory: .
+        run: |
+          git config user.name "TechGeekPH Build Bot"
+          git config user.email "137922253+TechGeek-PH@users.noreply.github.com"
+          git add chat-support-download/TechGeekPH-Chat-Support-v1.0.0.apk
+          if ! git diff --cached --quiet; then
+            git commit -m "Publish TechGeekPH Chat Support v1 APK"
+            git push origin HEAD:main
+          fi
