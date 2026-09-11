@@ -36,6 +36,13 @@ jobs:
         with:
           gradle-version: '8.9'
 
+      - name: Read app version
+        id: version
+        run: |
+          VERSION_NAME=$(sed -n "s/.*versionName '\([^']*\)'.*/\1/p" app/build.gradle | head -1)
+          test -n "$VERSION_NAME"
+          echo "name=$VERSION_NAME" >> "$GITHUB_OUTPUT"
+
       - name: Build installable APK
         run: gradle :app:assembleDebug --no-daemon
 
@@ -47,24 +54,27 @@ jobs:
       - name: Copy APK to public download folder
         working-directory: .
         run: |
+          VERSION_NAME="${{ steps.version.outputs.name }}"
           mkdir -p chat-support-download
-          cp android-chat-support/app/build/outputs/apk/debug/app-debug.apk chat-support-download/TechGeekPH-Chat-Support-v1.0.0.apk
+          cp android-chat-support/app/build/outputs/apk/debug/app-debug.apk "chat-support-download/TechGeekPH-Chat-Support-v${VERSION_NAME}.apk"
+          cp android-chat-support/app/build/outputs/apk/debug/app-debug.apk chat-support-download/TechGeekPH-Chat-Support-latest.apk
 
       - name: Upload workflow artifact
         uses: actions/upload-artifact@v4
         with:
-          name: TechGeekPH-Chat-Support-v1.0.0
+          name: TechGeekPH-Chat-Support-v${{ steps.version.outputs.name }}
           path: android-chat-support/app/build/outputs/apk/debug/app-debug.apk
 
       - name: Commit exact APK binary
         working-directory: .
         run: |
+          VERSION_NAME="${{ steps.version.outputs.name }}"
           git config user.name "TechGeekPH Build Bot"
           git config user.email "137922253+TechGeek-PH@users.noreply.github.com"
           git fetch origin main
           git rebase origin/main
-          git add chat-support-download/TechGeekPH-Chat-Support-v1.0.0.apk
+          git add "chat-support-download/TechGeekPH-Chat-Support-v${VERSION_NAME}.apk" chat-support-download/TechGeekPH-Chat-Support-latest.apk
           if ! git diff --cached --quiet; then
-            git commit -m "Publish TechGeekPH Chat Support v1 APK"
+            git commit -m "Publish TechGeekPH Chat Support v${VERSION_NAME} APK"
             git push origin HEAD:main
           fi
