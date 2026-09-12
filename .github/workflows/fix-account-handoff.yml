@@ -24,11 +24,7 @@ jobs:
 
           if 'async function acceptPortalHandoff(){' not in text:
               marker = "async function loadBill(){"
-              helper = r'''async function acceptPortalHandoff(){
-const raw=String(location.hash||'').replace(/^#/,'');if(!raw)return false;const hp=new URLSearchParams(raw),token=hp.get('token'),expected=String(hp.get('account')||'').trim().toUpperCase();if(!token)return false;
-try{const r=await rpc('client_portal_get_data',{p_token:token});const actual=String(r?.client?.account_no||'').trim().toUpperCase();if(!r?.ok||!actual||(expected&&actual!==expected))throw new Error('Account handoff mismatch.');localStorage.setItem(TOKEN_KEY,token);portal=r;history.replaceState({},'',location.pathname+location.search);renderBill();show('billCard');return true}catch(e){localStorage.removeItem(TOKEN_KEY);portal=null;history.replaceState({},'',location.pathname+location.search);show('loginCard');notice('loginNotice','For your security, please verify your account again.');return true}}
-function clearStalePortalSession(){try{const ref=new URL(document.referrer);if(ref.origin==='https://client.network-techgeekph.com'&&!location.hash)localStorage.removeItem(TOKEN_KEY)}catch(_){}}
-'''
+              helper = "async function acceptPortalHandoff(){\nconst raw=String(location.hash||'').replace(/^#/,'');if(!raw)return false;const hp=new URLSearchParams(raw),token=hp.get('token'),expected=String(hp.get('account')||'').trim().toUpperCase();if(!token)return false;\ntry{const r=await rpc('client_portal_get_data',{p_token:token});const actual=String(r?.client?.account_no||'').trim().toUpperCase();if(!r?.ok||!actual||(expected&&actual!==expected))throw new Error('Account handoff mismatch.');localStorage.setItem(TOKEN_KEY,token);portal=r;history.replaceState({},'',location.pathname+location.search);renderBill();show('billCard');return true}catch(e){localStorage.removeItem(TOKEN_KEY);portal=null;history.replaceState({},'',location.pathname+location.search);show('loginCard');notice('loginNotice','For your security, please verify your account again.');return true}}\nfunction clearStalePortalSession(){try{const ref=new URL(document.referrer);if(ref.origin==='https://client.network-techgeekph.com'&&!location.hash)localStorage.removeItem(TOKEN_KEY)}catch(_){}}\n"
               if marker not in text:
                   raise SystemExit('Unable to find Payment Center loadBill marker')
               text = text.replace(marker, helper + marker, 1)
