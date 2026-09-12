@@ -1,0 +1,57 @@
+name: Fix Payment Center account handoff
+
+on:
+  push:
+    paths:
+      - '.github/workflows/fix-account-handoff.yml'
+
+permissions:
+  contents: write
+
+jobs:
+  patch:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Patch secure client account handoff
+        shell: bash
+        run: |
+          python3 - <<'PY'
+          from pathlib import Path
+
+          path = Path('index.html')
+          text = path.read_text()
+
+          if 'async function acceptPortalHandoff(){' not in text:
+              marker = "async function loadBill(){"
+              helper = r'''async function acceptPortalHandoff(){
+const raw=String(location.hash||'').replace(/^#/,'');if(!raw)return false;const hp=new URLSearchParams(raw),token=hp.get('token'),expected=String(hp.get('account')||'').trim().toUpperCase();if(!token)return false;
+try{const r=await rpc('client_portal_get_data',{p_token:token});const actual=String(r?.client?.account_no||'').trim().toUpperCase();if(!r?.ok||!actual||(expected&&actual!==expected))throw new Error('Account handoff mismatch.');localStorage.setItem(TOKEN_KEY,token);portal=r;history.replaceState({},'',location.pathname+location.search);renderBill();show('billCard');return true}catch(e){localStorage.removeItem(TOKEN_KEY);portal=null;history.replaceState({},'',location.pathname+location.search);show('loginCard');notice('loginNotice','For your security, please verify your account again.');return true}}
+function clearStalePortalSession(){try{const ref=new URL(document.referrer);if(ref.origin==='https://client.network-techgeekph.com'&&!location.hash)localStorage.removeItem(TOKEN_KEY)}catch(_){}}
+'''
+              if marker not in text:
+                  raise SystemExit('Unable to find Payment Center loadBill marker')
+              text = text.replace(marker, helper + marker, 1)
+
+          old_boot = "const params=new URLSearchParams(location.search);if(params.get('payment')==='success'){show('successCard');checkPaid();pollTimer=setInterval(checkPaid,2000);setTimeout(()=>{if(pollTimer){clearInterval(pollTimer);pollTimer=null;$('successTitle').textContent='Payment received';$('successText').textContent='Payment was received and confirmation is still processing. Your account will update automatically once the secure webhook is received.'}},30000)}else if(params.get('payment')==='cancelled'){loadBill().then(()=>notice('payNotice','Payment was cancelled. No payment was recorded.'))}else loadBill();"
+          new_boot = "async function boot(){const handled=await acceptPortalHandoff();if(handled)return;clearStalePortalSession();const params=new URLSearchParams(location.search);if(params.get('payment')==='success'){show('successCard');checkPaid();pollTimer=setInterval(checkPaid,2000);setTimeout(()=>{if(pollTimer){clearInterval(pollTimer);pollTimer=null;$('successTitle').textContent='Payment received';$('successText').textContent='Payment was received and confirmation is still processing. Your account will update automatically once the secure webhook is received.'}},30000)}else if(params.get('payment')==='cancelled'){loadBill().then(()=>notice('payNotice','Payment was cancelled. No payment was recorded.'))}else loadBill()}boot();"
+
+          if old_boot in text:
+              text = text.replace(old_boot, new_boot, 1)
+          elif new_boot not in text:
+              raise SystemExit('Unable to patch Payment Center startup flow')
+
+          path.write_text(text)
+          PY
+      - name: Commit Payment Center patch
+        shell: bash
+        run: |
+          if git diff --quiet -- index.html; then
+            echo 'Payment Center handoff already patched.'
+            exit 0
+          fi
+          git config user.name 'TechGeekPH'
+          git config user.email '137922253+TechGeek-PH@users.noreply.github.com'
+          git add index.html
+          git commit -m 'Use signed-in client account in Payment Center'
+          git push
