@@ -16,7 +16,7 @@ import android.webkit.WebViewClient;
 import android.widget.FrameLayout;
 
 public class MainActivity extends Activity {
-    private static final String HOME_URL = "https://client.network-techgeekph.com/";
+    private static final String HOME_URL = "https://client.network-techgeekph.com/dashboard";
     private WebView webView;
 
     @Override
