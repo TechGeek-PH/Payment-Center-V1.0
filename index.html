@@ -9,25 +9,30 @@
 <style>
 :root{--b:#064f83;--b2:#023d6b;--ok:#16865e;--bad:#b42345;--ink:#172438;--m:#6b7a8e;--line:#dbe4ee;--bg:#f3f6fa;font-family:Inter,system-ui,-apple-system,"Segoe UI",sans-serif}
 *{box-sizing:border-box}body{margin:0;min-height:100vh;background:linear-gradient(160deg,#eef7ff,#f7f8fb);color:var(--ink)}button,input{font:inherit}
-.top{background:#fff;border-bottom:1px solid var(--line);padding:12px 18px}.topin{width:min(720px,100%);margin:auto;display:flex;align-items:center;justify-content:space-between;gap:12px}.logo{width:150px;max-height:55px;object-fit:contain}.secure{font-size:.72rem;font-weight:900;color:var(--ok)}
-main{width:min(720px,calc(100% - 24px));margin:24px auto 50px}.hero{padding:24px;border-radius:22px;background:linear-gradient(135deg,var(--b2),var(--b));color:#fff;box-shadow:0 16px 38px #064f8324}.hero h1{margin:0;font-size:clamp(1.6rem,5vw,2.5rem)}.hero p{margin:8px 0 0;color:#dbeafa;line-height:1.55}
-.card{margin-top:14px;background:#fff;border:1px solid var(--line);border-radius:18px;padding:18px;box-shadow:0 9px 28px #13324c0b}.card h2{margin:0 0 6px;font-size:1.15rem}.muted{color:var(--m);font-size:.76rem;line-height:1.55}
-.field{margin-top:12px}.field label{display:block;margin-bottom:5px;font-size:.72rem;font-weight:900}.field input{width:100%;min-height:50px;border:1px solid var(--line);border-radius:12px;padding:0 13px;font-size:16px}
-.btn{width:100%;min-height:52px;border:0;border-radius:12px;padding:0 14px;font-weight:950;cursor:pointer}.primary{background:var(--b);color:#fff}.secondary{background:#eef7ff;color:var(--b);border:1px solid #b8d8ef}.btn:disabled{opacity:.55;cursor:not-allowed}
-.notice{display:none;margin-top:12px;padding:11px 12px;border-radius:10px;font-size:.76rem}.notice.show{display:block}.notice.err{background:#fff0f2;color:#a3153d}.notice.ok{background:#eefaf5;color:#126247}
-.billgrid{display:grid;grid-template-columns:1fr 1fr;gap:9px;margin-top:14px}.item{padding:11px;border-radius:11px;background:#f6f9fc}.item span{display:block;color:var(--m);font-size:.63rem;font-weight:900}.item b{display:block;margin-top:4px;color:var(--b);font-size:.9rem}
-.amount{margin:18px 0 3px;font-size:2.35rem;line-height:1;font-weight:950;color:var(--b)}.totals{margin-top:14px;border:1px solid var(--line);border-radius:13px;overflow:hidden}.totalrow{display:flex;justify-content:space-between;gap:16px;padding:10px 12px;font-size:.78rem;border-bottom:1px solid #eef2f6}.totalrow:last-child{border-bottom:0;background:#f4faff;font-weight:950;color:var(--b);font-size:.9rem}
-.qrbox{margin-top:15px;padding:15px;border:1px solid #b8d8ef;border-radius:14px;background:#f4faff;display:flex;align-items:center;gap:12px}.qrico{width:48px;height:48px;border-radius:13px;background:#fff;border:1px solid #d5e7f5;display:grid;place-items:center;font-size:1.6rem}.qrbox b{display:block;color:var(--b)}.qrbox span{display:block;margin-top:3px;color:var(--m);font-size:.7rem;line-height:1.45}
-.success{padding:22px;text-align:center}.check{width:60px;height:60px;margin:0 auto 12px;border-radius:50%;display:grid;place-items:center;background:#eaf8f2;color:var(--ok);font-size:2rem;font-weight:950}.hidden{display:none!important}
-@media(max-width:520px){main{margin-top:14px}.hero{padding:20px}.billgrid{grid-template-columns:1fr}.topin{align-items:flex-start}.secure{padding-top:9px}}
+.top{background:#fff;border-bottom:1px solid var(--line);padding:12px 18px}.topin{width:min(620px,100%);margin:auto;display:flex;align-items:center;justify-content:space-between;gap:12px}.logo{width:150px;max-height:55px;object-fit:contain}.secure{font-size:.72rem;font-weight:900;color:var(--ok)}
+main{width:min(620px,calc(100% - 24px));margin:24px auto 50px}.hero{padding:24px;border-radius:22px;background:linear-gradient(135deg,var(--b2),var(--b));color:#fff;box-shadow:0 16px 38px #064f8324}.hero h1{margin:0;font-size:clamp(1.55rem,5vw,2.3rem)}.hero p{margin:8px 0 0;color:#dbeafa;line-height:1.55}
+.card{margin-top:14px;background:#fff;border:1px solid var(--line);border-radius:18px;padding:20px;box-shadow:0 9px 28px #13324c0b}.card h2{margin:0 0 6px;font-size:1.15rem}.muted{color:var(--m);font-size:.78rem;line-height:1.55}
+.field{margin-top:14px}.field label{display:block;margin-bottom:6px;font-size:.72rem;font-weight:900}.field input{width:100%;min-height:52px;border:1px solid var(--line);border-radius:12px;padding:0 13px;font-size:16px;outline:none}.field input:focus{border-color:#4d94c5;box-shadow:0 0 0 3px #0b6da516}
+.btn{width:100%;min-height:54px;border:0;border-radius:12px;padding:0 14px;font-weight:950;cursor:pointer}.primary{background:var(--b);color:#fff}.secondary{background:#eef7ff;color:var(--b);border:1px solid #b8d8ef}.btn:disabled{opacity:.58;cursor:not-allowed}
+.notice{display:none;margin-top:12px;padding:11px 12px;border-radius:10px;font-size:.78rem;line-height:1.45}.notice.show{display:block}.notice.err{background:#fff0f2;color:#a3153d}.notice.ok{background:#eefaf5;color:#126247}
+.paymongo-note{margin-top:14px;padding:12px;border:1px solid #d5e7f5;border-radius:12px;background:#f4faff;color:#58718a;font-size:.72rem;line-height:1.5}.paymongo-note b{color:var(--b)}
+.success{padding:24px;text-align:center}.check{width:60px;height:60px;margin:0 auto 12px;border-radius:50%;display:grid;place-items:center;background:#eaf8f2;color:var(--ok);font-size:2rem;font-weight:950}.hidden{display:none!important}
+@media(max-width:520px){main{margin-top:14px}.hero{padding:20px}.topin{align-items:flex-start}.secure{padding-top:9px}.card{padding:18px}}
 </style>
 </head>
 <body>
-<header class="top"><div class="topin"><img class="logo" src="assets/logo/TechGeekPH-logo.png" alt="TechGeekPH"><div class="secure">🔒 Secure QR Ph Payment</div></div></header>
+<header class="top"><div class="topin"><img class="logo" src="assets/logo/TechGeekPH-logo.png" alt="TechGeekPH"><div class="secure">🔒 Secure Payment</div></div></header>
 <main>
-<section class="hero"><h1>Payment Center</h1><p>Pay your TechGeekPH internet bill securely through QR Ph. Once payment is confirmed by PayMongo, your billing account is updated automatically.</p></section>
-<section id="loginCard" class="card hidden"><h2>Verify your account</h2><p class="muted">Enter your TechGeekPH Account Number and registered mobile number.</p><div id="loginNotice" class="notice"></div><div class="field"><label>Account Number</label><input id="accountNo" placeholder="SATR0001" autocomplete="username"></div><div class="field"><label>Registered Mobile Number</label><input id="phone" placeholder="09XXXXXXXXX" inputmode="tel" autocomplete="tel"></div><button id="verifyBtn" class="btn primary" style="margin-top:14px">Continue to Payment</button></section>
-<section id="billCard" class="card hidden"><h2>Your current bill</h2><p class="muted">Please confirm your account and amount before opening the QR Ph payment page.</p><div id="payNotice" class="notice"></div><div class="billgrid"><div class="item"><span>CLIENT</span><b id="clientName">—</b></div><div class="item"><span>ACCOUNT NO.</span><b id="accountLabel">—</b></div><div class="item"><span>BILLING PERIOD</span><b id="period">—</b></div><div class="item"><span>DUE DATE</span><b id="due">—</b></div></div><div class="amount" id="amount">₱0.00</div><div class="muted">Total amount due</div><div class="totals"><div class="totalrow"><span>Internet Bill</span><b id="billAmount">₱0.00</b></div><div class="totalrow"><span>Total Payment</span><b id="totalAmount">₱0.00</b></div></div><div class="qrbox"><div class="qrico">▦</div><div><b>QR Ph</b><span>Scan using GCash, Maya, BPI, BDO, UnionBank, and other participating bank or e-wallet apps that support QR Ph.</span></div></div><button id="payBtn" class="btn primary" style="margin-top:14px">Pay via QR Ph</button><button id="changeBtn" class="btn secondary" style="margin-top:9px">Use another account</button></section>
+<section class="hero"><h1>Payment Center</h1><p>Enter your account details below. After verification, you will be redirected directly to PayMongo's secure payment page.</p></section>
+<section id="loginCard" class="card">
+  <h2>Pay your bill</h2>
+  <p class="muted">Only your TechGeekPH Account Number and registered contact number are required.</p>
+  <div id="loginNotice" class="notice"></div>
+  <div class="field"><label>Account Number</label><input id="accountNo" placeholder="SATR0001" autocomplete="username" autocapitalize="characters"></div>
+  <div class="field"><label>Registered Contact Number</label><input id="phone" placeholder="09XXXXXXXXX" inputmode="numeric" autocomplete="tel" maxlength="13"></div>
+  <button id="verifyBtn" class="btn primary" style="margin-top:16px">Continue to PayMongo</button>
+  <div class="paymongo-note"><b>Secure checkout:</b> Your outstanding bill is retrieved automatically after verification. No amount needs to be entered manually.</div>
+</section>
 <section id="successCard" class="card success hidden"><div class="check">✓</div><h2 id="successTitle">Checking payment…</h2><p id="successText" class="muted">We are waiting for PayMongo's secure payment confirmation.</p><button id="backBtn" class="btn secondary" style="margin-top:14px">Back to Payment Center</button></section>
 </main>
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
@@ -37,23 +42,53 @@ const SUPABASE_URL='https://tcexzfztdgximrzuosqs.supabase.co';
 const SUPABASE_KEY='sb_publishable_8H8_S7NTWvzPCLvYUe2C4g_k3Ltjfiz';
 const TOKEN_KEY='tg_client_portal_token';
 const db=supabase.createClient(SUPABASE_URL,SUPABASE_KEY,{auth:{persistSession:false}});
-const $=id=>document.getElementById(id);let portal=null,pollTimer=null;
-const peso=v=>'₱'+Number(v||0).toLocaleString('en-PH',{minimumFractionDigits:2,maximumFractionDigits:2});
-const date=v=>{if(!v)return'—';try{return new Intl.DateTimeFormat('en-PH',{year:'numeric',month:'short',day:'numeric'}).format(new Date(v+'T00:00:00'))}catch(_){return v}};
-function notice(id,text,kind='err'){const n=$(id);n.textContent=text;n.className='notice show '+kind}function clearNotice(id){const n=$(id);n.className='notice';n.textContent=''}
-function show(id){['loginCard','billCard','successCard'].forEach(x=>$(x).classList.toggle('hidden',x!==id))}
+const $=id=>document.getElementById(id);let pollTimer=null;
+function notice(text,kind='err'){const n=$('loginNotice');n.textContent=text;n.className='notice show '+kind}
+function clearNotice(){const n=$('loginNotice');n.className='notice';n.textContent=''}
+function show(id){$('loginCard').classList.toggle('hidden',id!=='loginCard');$('successCard').classList.toggle('hidden',id!=='successCard')}
 async function rpc(name,args){const {data,error}=await db.rpc(name,args);if(error)throw error;return data}
-async function acceptPortalHandoff(){
-const raw=String(location.hash||'').replace(/^#/,'');if(!raw)return false;const hp=new URLSearchParams(raw),token=hp.get('token'),expected=String(hp.get('account')||'').trim().toUpperCase();if(!token)return false;
-try{const r=await rpc('client_portal_get_data',{p_token:token});const actual=String(r?.client?.account_no||'').trim().toUpperCase();if(!r?.ok||!actual||(expected&&actual!==expected))throw new Error('Account handoff mismatch.');localStorage.setItem(TOKEN_KEY,token);portal=r;history.replaceState({},'',location.pathname+location.search);renderBill();show('billCard');return true}catch(e){localStorage.removeItem(TOKEN_KEY);portal=null;history.replaceState({},'',location.pathname+location.search);show('loginCard');notice('loginNotice','For your security, please verify your account again.');return true}}
-function clearStalePortalSession(){try{const ref=new URL(document.referrer);if(ref.origin==='https://client.network-techgeekph.com'&&!location.hash)localStorage.removeItem(TOKEN_KEY)}catch(_){}}
-async function loadBill(){const token=localStorage.getItem(TOKEN_KEY);if(!token){show('loginCard');return false}try{const r=await rpc('client_portal_get_data',{p_token:token});if(!r?.ok){localStorage.removeItem(TOKEN_KEY);show('loginCard');return false}portal=r;renderBill();show('billCard');return true}catch(_){localStorage.removeItem(TOKEN_KEY);show('loginCard');return false}}
-function renderBill(){const c=portal?.client||{},b=portal?.current_bill||{},dueAmt=Number(b.balance??b.amount_due??0),total=dueAmt>0?dueAmt:0;$('clientName').textContent=c.client_name||'—';$('accountLabel').textContent=c.account_no||'—';$('period').textContent=b.billing_period||'—';$('due').textContent=date(b.due_date);$('billAmount').textContent=peso(dueAmt);$('totalAmount').textContent=peso(total);$('amount').textContent=peso(total);$('payBtn').disabled=!(dueAmt>0);$('payBtn').textContent=dueAmt>0?'Pay via QR Ph':'No Outstanding Balance';}
-async function verify(){clearNotice('loginNotice');const a=$('accountNo').value.trim(),p=$('phone').value.trim();if(!a||!p)return notice('loginNotice','Enter your account number and registered mobile number.');$('verifyBtn').disabled=true;$('verifyBtn').textContent='Verifying…';try{const r=await rpc('client_portal_login',{p_account_no:a,p_phone:p});if(!r?.ok)return notice('loginNotice',r?.message||'Account verification failed.');localStorage.setItem(TOKEN_KEY,r.token);await loadBill()}catch(e){notice('loginNotice',e.message||'Unable to verify account.')}finally{$('verifyBtn').disabled=false;$('verifyBtn').textContent='Continue to Payment'}}
-async function pay(){clearNotice('payNotice');const old=$('payBtn').textContent;$('payBtn').disabled=true;$('payBtn').textContent='Opening QR Ph…';try{const token=localStorage.getItem(TOKEN_KEY);const {data:r,error}=await db.functions.invoke('paymongo-create-checkout',{body:{token}});if(error)throw error;if(!r?.ok)throw new Error(r?.message||'Unable to start QR Ph checkout.');location.href=r.checkout_url}catch(e){notice('payNotice',e.message||'Unable to open QR Ph checkout.');$('payBtn').disabled=false;$('payBtn').textContent=old}}
-async function checkPaid(){const token=localStorage.getItem(TOKEN_KEY);if(!token)return;try{const r=await rpc('client_portal_get_data',{p_token:token});const b=r?.current_bill||{};if(r?.ok&&(String(b.billing_status||'').toUpperCase()==='PAID'||Number(b.balance||0)<=0)){$('successTitle').textContent='Payment Successful';$('successText').textContent='Your payment has been confirmed and your TechGeekPH billing account is now updated as PAID.';if(pollTimer){clearInterval(pollTimer);pollTimer=null}}}catch(_){}}
-$('verifyBtn').addEventListener('click',verify);$('phone').addEventListener('keydown',e=>{if(e.key==='Enter')verify()});$('payBtn').addEventListener('click',pay);$('changeBtn').addEventListener('click',()=>{localStorage.removeItem(TOKEN_KEY);portal=null;show('loginCard')});$('backBtn').addEventListener('click',()=>{history.replaceState({},'',location.pathname);loadBill()});
-async function boot(){const handled=await acceptPortalHandoff();if(handled)return;clearStalePortalSession();const params=new URLSearchParams(location.search);if(params.get('payment')==='success'){show('successCard');checkPaid();pollTimer=setInterval(checkPaid,2000);setTimeout(()=>{if(pollTimer){clearInterval(pollTimer);pollTimer=null;$('successTitle').textContent='Payment received';$('successText').textContent='Payment was received and confirmation is still processing. Your account will update automatically once the secure webhook is received.'}},30000)}else if(params.get('payment')==='cancelled'){loadBill().then(()=>notice('payNotice','Payment was cancelled. No payment was recorded.'))}else loadBill()}boot();
+function normalizePhone(v){const digits=String(v||'').replace(/\D/g,'');if(digits.startsWith('639')&&digits.length===12)return '0'+digits.slice(2);return digits}
+async function startCheckout(token){
+  const {data:r,error}=await db.functions.invoke('paymongo-create-checkout',{body:{token}});
+  if(error)throw error;
+  if(!r?.ok||!r?.checkout_url)throw new Error(r?.message||'Unable to start PayMongo checkout.');
+  location.assign(r.checkout_url);
+}
+async function verifyAndPay(){
+  clearNotice();
+  const account=$('accountNo').value.trim().toUpperCase();
+  const phone=normalizePhone($('phone').value);
+  if(!account||!phone)return notice('Enter your account number and registered contact number.');
+  if(!/^09\d{9}$/.test(phone))return notice('Enter a valid 11-digit mobile number, for example 09XXXXXXXXX.');
+  const btn=$('verifyBtn');btn.disabled=true;btn.textContent='Verifying account…';
+  try{
+    const r=await rpc('client_portal_login',{p_account_no:account,p_phone:phone});
+    if(!r?.ok)throw new Error(r?.message||'Account verification failed.');
+    localStorage.setItem(TOKEN_KEY,r.token);
+    btn.textContent='Opening PayMongo…';
+    await startCheckout(r.token);
+  }catch(e){notice(e?.message||'Unable to continue to payment. Please check your account details and try again.');btn.disabled=false;btn.textContent='Continue to PayMongo'}
+}
+async function checkPaid(){
+  const token=localStorage.getItem(TOKEN_KEY);if(!token)return;
+  try{const r=await rpc('client_portal_get_data',{p_token:token});const b=r?.current_bill||{};if(r?.ok&&(String(b.billing_status||'').toUpperCase()==='PAID'||Number(b.balance||0)<=0)){$('successTitle').textContent='Payment Successful';$('successText').textContent='Your payment has been confirmed and your TechGeekPH billing account is now updated as PAID.';if(pollTimer){clearInterval(pollTimer);pollTimer=null}}}catch(_){}}
+$('verifyBtn').addEventListener('click',verifyAndPay);
+$('accountNo').addEventListener('keydown',e=>{if(e.key==='Enter')$('phone').focus()});
+$('phone').addEventListener('keydown',e=>{if(e.key==='Enter')verifyAndPay()});
+$('backBtn').addEventListener('click',()=>{if(pollTimer){clearInterval(pollTimer);pollTimer=null}history.replaceState({},'',location.pathname);show('loginCard')});
+async function boot(){
+  const params=new URLSearchParams(location.search);
+  if(params.get('payment')==='success'){
+    show('successCard');checkPaid();pollTimer=setInterval(checkPaid,2000);
+    setTimeout(()=>{if(pollTimer){clearInterval(pollTimer);pollTimer=null;$('successTitle').textContent='Payment received';$('successText').textContent='Your payment was received and confirmation is still processing. Your billing account will update automatically once PayMongo confirmation is completed.'}},30000);
+  }else{
+    show('loginCard');
+    if(params.get('payment')==='cancelled')notice('Payment was cancelled. No payment was recorded.');
+    const preset=new URLSearchParams(location.search).get('account');if(preset)$('accountNo').value=preset.toUpperCase();
+  }
+}
+boot();
 })();
 </script>
-</body></html>
+</body>
+</html>
