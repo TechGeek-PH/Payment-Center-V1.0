@@ -1,0 +1,8 @@
+{
+  "versionCode": 310,
+  "versionName": "3.1.0",
+  "apkBase64Url": "https://techgeek-ph.github.io/Payment-Center-V1.0/client-app-download/TechGeekPH-Client-v3.1.0.apk.b64",
+  "message": "A TechGeekPH Client update is available. This version adds working chat photo upload and the built-in app updater for future releases.",
+  "required": false,
+  "sha256": "744cc771b6610a1c731baca3377d4199451ac8cf75292d1f5d4e98ca7ce6a39c"
+}
